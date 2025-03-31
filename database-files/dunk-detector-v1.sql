@@ -3,65 +3,48 @@ CREATE DATABASE IF NOT EXISTS dunkDetector;
 
 USE dunkDetector;
 
-# Users table:
+# User table:
 CREATE TABLE users
 (
-    id         INTEGER AUTO_INCREMENT PRIMARY KEY,
-    firstName  VARCHAR(50) NOT NULL,
-    middleName VARCHAR(50),
-    lastName   VARCHAR(50) NOT NULL,
-    mobile     VARCHAR(15),
-    email      VARCHAR(75) UNIQUE NOT NULL,
-    role       ENUM ('admin', 'agent', 'player', 'system administrator', 'data analyst') NOT NULL,
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    firstName  varchar(50) NOT NULL,
+    middleName varchar(50),
+    lastName varchar(50) NOT NULL,
+    mobile varchar(15),
+    email varchar(75) UNIQUE NOT NULL,
+    role enum ('admin', 'agent', 'player', 'system administrator', 'data analyst', 'general manager') NOT NULL, # Adjust as needed
 
     INDEX (mobile),
     INDEX (email),
     INDEX (id)
 );
 
-# Agents table:
+# Agent table:
 CREATE TABLE agents
 (
-    id         INTEGER AUTO_INCREMENT PRIMARY KEY,
-    firstName  VARCHAR(50) NOT NULL,
-    middleName VARCHAR(50),
-    lastName   VARCHAR(50) NOT NULL,
-    mobile     VARCHAR(15),
-    email      VARCHAR(75) UNIQUE NOT NULL,
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    firstName varchar(50) NOT NULL,
+    middleName varchar(50),
+    lastName varchar(50) NOT NULL,
+    mobile varchar(15),
+    email varchar(75) UNIQUE NOT NULL,
 
     INDEX (mobile),
     INDEX (email),
     INDEX (id)
 );
 
-# General Managers table (Initially without teamId foreign key)
-CREATE TABLE general_managers
-(
-    id         INTEGER AUTO_INCREMENT PRIMARY KEY,
-    firstName  VARCHAR(50) NOT NULL,
-    middleName VARCHAR(50),
-    lastName   VARCHAR(50) NOT NULL,
-    mobile     VARCHAR(15),
-    email      VARCHAR(75) UNIQUE NOT NULL,
-    teamId     INTEGER NULL,  # Will be added later
-
-    INDEX (mobile),
-    INDEX (email),
-    INDEX (teamId),
-    INDEX (id)
-);
-
-# Coaches table (Initially without teamId foreign key)
+# Coach table:
 CREATE TABLE coaches
 (
-    id         INTEGER AUTO_INCREMENT PRIMARY KEY,
-    firstName  VARCHAR(50) NOT NULL,
-    middleName VARCHAR(50),
-    lastName   VARCHAR(50) NOT NULL,
-    mobile     VARCHAR(15),
-    email      VARCHAR(75) UNIQUE NOT NULL,
-    teamId     INTEGER NULL,  # Will be added later
-    agentId    INTEGER NOT NULL,
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    firstName  varchar(50) NOT NULL,
+    middleName varchar(50),
+    lastName   varchar(50) NOT NULL,
+    mobile varchar(15),
+    email varchar(75) UNIQUE NOT NULL,
+    teamId integer NOT NULL,
+    agentId integer NOT NULL,
 
     FOREIGN KEY (agentId) REFERENCES agents (id)
         ON UPDATE RESTRICT
@@ -69,42 +52,79 @@ CREATE TABLE coaches
 
     INDEX (mobile),
     INDEX (email),
-    INDEX (teamId),
-    INDEX (id)
+    INDEX (id),
+    INDEX (teamId)
 );
 
-# Teams table (Initially without foreign key constraints)
+# General Manager table:
+CREATE TABLE general_managers
+(
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    firstName  varchar(50) NOT NULL,
+    middleName varchar(50),
+    lastName varchar(50) NOT NULL,
+    mobile varchar(15),
+    email varchar(75) UNIQUE NOT NULL,
+    teamId integer NOT NULL,
+
+    INDEX (mobile),
+    INDEX (email),
+    INDEX (id),
+    INDEX (teamId)
+);
+
+# Team table:
 CREATE TABLE teams
 (
-    id             INTEGER AUTO_INCREMENT PRIMARY KEY,
-    name           VARCHAR(50) NOT NULL,
-    isCollege      BOOLEAN,
-    isProfessional BOOLEAN,
-    city           VARCHAR(50) NOT NULL,
-    state          VARCHAR(50) NOT NULL,
-    country        VARCHAR(50) NOT NULL,
-    generalManagerID INTEGER NULL,  # Will be added later
-    coachID        INTEGER NULL,  # Will be added later
-    salaryCap      INTEGER NOT NULL,
-    playerRoster   VARCHAR(100) NOT NULL,
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    name varchar(50) NOT NULL,
+    isCollege boolean NULL,
+    isProfessional boolean NULL,
+    city varchar(50) NOT NULL,
+    state varchar(50) NOT NULL,
+    country varchar(50) NOT NULL,
+    generalManagerID integer NOT NULL,
+    coachID integer NOT NULL,
+    salaryCap integer NOT NULL,
 
-    INDEX (id)
+    FOREIGN KEY (coachID) REFERENCES coaches (id)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (generalManagerID) REFERENCES general_managers (id)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE,
+
+    index (id)
 );
 
-# Players table (Initially with injuryId set to NULL)
+# Injuries table:
+CREATE TABLE injuries
+(
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    playerId integer NOT NULL,
+    injuryDate date NOT NULL,
+    recoveryDate date NOT NULL,
+    description varchar(100) NOT NULL,
+
+    INDEX (id),
+    INDEX (playerId)
+);
+
+# Player table:
 CREATE TABLE players
 (
-    id         INTEGER AUTO_INCREMENT PRIMARY KEY,
-    firstName  VARCHAR(50) NOT NULL,
-    middleName VARCHAR(50),
-    lastName   VARCHAR(50) NOT NULL,
-    agentId    INTEGER NOT NULL,
-    position   VARCHAR(50) NOT NULL,
-    teamId     INTEGER NOT NULL,
-    height     INTEGER NOT NULL,
-    weight     INTEGER NOT NULL,
-    dob        DATE NOT NULL,
-    injuryId   INTEGER NULL,  # Will be added later
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    firstName varchar(50) NOT NULL,
+    middleName varchar(50),
+    lastName varchar(50) NOT NULL,
+    agentId integer NOT NULL,
+    position varchar(50) NOT NULL,
+    teamId integer NOT NULL,
+    height integer NOT NULL,
+    weight integer NOT NULL,
+    dob date NOT NULL,
+    injuryId integer NULL,
 
     FOREIGN KEY (agentId) REFERENCES agents (id)
         ON UPDATE RESTRICT
@@ -114,34 +134,27 @@ CREATE TABLE players
         ON UPDATE RESTRICT
         ON DELETE CASCADE,
 
-    INDEX (id)
-);
+    FOREIGN KEY (injuryId) REFERENCES injuries (id)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE,
 
-# Injuries table (Initially without playerId constraint)
-CREATE TABLE injuries
-(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    playerId INTEGER NULL,  # Will be added later
-    injuryDate DATE NOT NULL,
-    recoveryDate DATE NOT NULL,
-    description VARCHAR(100) NOT NULL,
-
-    INDEX (id),
-    INDEX (playerId)
+    index (id),
+    index (agentId),
+    index (teamId)
 );
 
 # Matches table:
 CREATE TABLE matches
 (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    homeTeamId INTEGER NOT NULL,
-    awayTeamId INTEGER NOT NULL,
-    date DATE NOT NULL,
-    time TIME NOT NULL,
-    location VARCHAR(50) NOT NULL,
-    winnerId INTEGER NOT NULL,
-    loserId INTEGER NOT NULL,
-    finalScore VARCHAR(50) NOT NULL,
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    homeTeamId integer NOT NULL,
+    awayTeamId integer NOT NULL,
+    date date NOT NULL,
+    time time NOT NULL,
+    location varchar(50) NOT NULL,
+    homeScore integer NOT NULL,
+    awayScore integer NOT NULL,
+    finalScore varchar(50) NOT NULL,
 
     FOREIGN KEY (homeTeamId) REFERENCES teams (id)
         ON UPDATE RESTRICT
@@ -151,50 +164,19 @@ CREATE TABLE matches
         ON UPDATE RESTRICT
         ON DELETE CASCADE,
 
-    FOREIGN KEY (winnerId) REFERENCES teams (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (loserId) REFERENCES teams (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    INDEX (id)
-);
-
-# Scout Reports table:
-CREATE TABLE scout_reports
-(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    authorId INTEGER NOT NULL,
-    playerId INTEGER NOT NULL,
-    date DATE NOT NULL,
-    content VARCHAR(50) NOT NULL,
-    matchId INTEGER NOT NULL,
-
-    FOREIGN KEY (playerId) REFERENCES players (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (matchId) REFERENCES matches (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (authorId) REFERENCES users (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    INDEX (id)
+    INDEX (id),
+    INDEX (homeTeamId),
+    INDEX (awayTeamId)
 );
 
 # Game plans table:
-CREATE TABLE game_plans
+CREATE TABLE gameplans
 (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    matchId  INTEGER NOT NULL,
-    coachId  INTEGER NOT NULL,
-    planDate DATE NOT NULL,
-    content  VARCHAR(50) NOT NULL,
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    matchId  integer NOT NULL,
+    coachId  integer NOT NULL,
+    planDate date NOT NULL,
+    content varchar(50) NOT NULL,
 
     FOREIGN KEY (matchId) REFERENCES matches (id)
         ON UPDATE RESTRICT
@@ -204,14 +186,17 @@ CREATE TABLE game_plans
         ON UPDATE RESTRICT
         ON DELETE CASCADE,
 
-    INDEX (id)
+    INDEX (id),
+    INDEX (coachId),
+    INDEX (matchId)
 );
 
+# Stats table:
 CREATE TABLE statistics
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
     playerId integer NOT NULL,
-    matchId  integer NOT NULL,
+    matchId integer NOT NULL,
     totalPoints integer NOT NULL,
     fieldGoals integer NOT NULL,
     threePointers integer NOT NULL,
@@ -241,7 +226,7 @@ CREATE TABLE statistics
 CREATE TABLE reports
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
-    authorId   integer NOT NULL, # should this reference userID?
+    authorId integer NOT NULL,
     reportDate date NOT NULL,
     content varchar(50) NOT NULL,
 
@@ -253,27 +238,30 @@ CREATE TABLE reports
     INDEX (authorId)
 );
 
-# Adding Foreign Key Constraints After Table Creation
-ALTER TABLE teams ADD FOREIGN KEY (generalManagerID) REFERENCES general_managers (id)
-    ON UPDATE RESTRICT
-    ON DELETE CASCADE;
+# Scout reports table:
+CREATE TABLE scout_reports
+(
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    authorId integer NOT NULL,
+    playerId integer NOT NULL,
+    matchId integer NOT NULL,
+    reportDate date NOT NULL,
+    content varchar(50) NOT NULL,
+    playerRating integer NOT NULL,
 
-ALTER TABLE teams ADD FOREIGN KEY (coachID) REFERENCES coaches (id)
-    ON UPDATE RESTRICT
-    ON DELETE CASCADE;
+    FOREIGN KEY (authorId) REFERENCES users (id)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE,
 
-ALTER TABLE general_managers ADD FOREIGN KEY (teamId) REFERENCES teams (id)
-    ON UPDATE RESTRICT
-    ON DELETE CASCADE;
+    FOREIGN KEY (playerId) REFERENCES players (id)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE,
 
-ALTER TABLE coaches ADD FOREIGN KEY (teamId) REFERENCES teams (id)
-    ON UPDATE RESTRICT
-    ON DELETE CASCADE;
+    FOREIGN KEY (matchId) REFERENCES matches (id)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE,
 
-ALTER TABLE players ADD FOREIGN KEY (injuryId) REFERENCES injuries (id)
-    ON UPDATE RESTRICT
-    ON DELETE CASCADE;
-
-ALTER TABLE injuries ADD FOREIGN KEY (playerId) REFERENCES players (id)
-    ON UPDATE RESTRICT
-    ON DELETE CASCADE;
+    INDEX (id),
+    INDEX (authorId),
+    INDEX (playerId)
+);

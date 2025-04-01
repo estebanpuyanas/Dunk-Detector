@@ -265,3 +265,68 @@ CREATE TABLE scout_reports
     INDEX (authorId),
     INDEX (playerId)
 );
+
+-- Insertings values for each table
+INSERT INTO users (firstName, middleName, lastName, mobile, email, role)
+VALUES("Alex", NULL, "Montgomery", "908-324-9005", "Alex_Montgomery@gmail.com", 'system administrator'),
+("Patrick", "James", "Carter", "732-735-7372", "PJCarter.73@gmail.com", 'general manager'),
+("Phillip", "Robin", "Smith", "508-564-1024", "Psmith_10@yahoo.com", 'data analyst');
+
+INSERT INTO agents (firstName, middleName, lastName, mobile, email)
+VALUES("Liam", NULL, "Kerney", "233-291-2034", "liam_kerney67@gmail.com"),
+("Jimmy", "Falcon", "Carter", "210-395-3922", "jf.carter21@gmail.com");
+
+INSERT INTO coaches (firstName, middleName, lastName, mobile, email, teamId, agentId)
+VALUES ('Mike', 'Damon', 'Thompson', '556-677-8899', 'mike.thompson@gmail.com', 1, 1),
+('Eric', 'Quan', 'Song', '923-200-0001', 'eric.qsong@gmail.com', 2, 2);
+
+INSERT INTO general_managers (firstName, middleName, lastName, mobile, email, teamId)
+VALUES ('Robert', 'Evan', 'Jones', '667-788-9900', 'robert.jones@yahoo.com', 1),
+('Roger', 'Emmet', 'Fynes', '667-788-9900', 'roger.fynes@yahoo.com', 2);
+
+INSERT INTO teams (name, isCollege, isProfessional, city, state, country, generalManagerID, coachID, salaryCap)
+VALUES ('Los Angeles Lakers', 0, 1, 'Los Angeles', 'California', 'USA', 1, 1, 10000000),
+('Boston Celtics', 0, 1, 'Boston', 'Massachusetts', 'USA', 2, 2, 10000500);
+
+INSERT INTO injuries (playerId, injuryDate, recoveryDate, description)
+VALUES (1, '2024-03-01', '2024-03-15', 'Sprained ankle'),
+(2, '2024-03-20', '2024-04-05', 'Knee injury'),
+(2, '2024-04-15', '2024-04-21', 'Broken Finger');
+
+INSERT INTO players (firstName, middleName, lastName, agentId, position, teamId, height, weight, dob, injuryId)
+VALUES ('James', 'Frank', 'Harden', 1, 'Point Guard', 1, 195, 200, '1993-08-26', 1),
+('Jerome', 'Oliver', 'Rodrigo', 2, 'Power Foreward', 2, 211, 220, '1993-09-20', 2);
+
+INSERT INTO matches (homeTeamId, awayTeamId, date, time, location, homeScore, awayScore, finalScore)
+VALUES (1, 2, '2024-11-30', '19:00:00', 'LA Arena', 102, 98, '102-98'),
+(2, 1, '2025-03-08', '19:00:00', 'Boston Stadium', 111, 101, '111-101');
+
+INSERT INTO gameplans (matchId, coachId, planDate, content)
+VALUES (1, 1, '2024-11-29', 'Focus on fast breaks and defensive rebounds....'),
+(2, 2, '2025-03-05', 'Emphasize perimeter defense and ball movement.....');
+
+INSERT INTO statistics (playerId, matchId, totalPoints, fieldGoals, threePointers, steals, blocks, rebounds, assists, turnovers, freeThrows, totalPlayTime, fouls)
+VALUES (1, 1, 27, 11, 3, 2, 1, 5, 4, 3, 2, '00:38:00', 1),
+(1, 2, 23, 9, 3, 2, 4, 5, 3, 1, 2, '00:35:00', 0),
+(2, 1, 31, 12, 6, 3, 0, 6, 4, 5, 1, '00:35:00', 2),
+(2, 2, 17, 7, 2, 3, 0, 8, 2, 4, 1, '00:38:00', 1);
+
+INSERT INTO reports (authorId, reportDate, content)
+VALUES (1, '2024-11-30', 'LA vs Boston - Sys admin POV'),
+(2, '2024-11-30', 'LA vs Boston - GM POV'),
+(3, '2025-03-08', 'Boston vs LA - Data Analyst POV');
+
+INSERT INTO scout_reports (authorId, playerId, matchId, reportDate, content, playerRating)
+VALUES
+(1, 1, 1, '2024-11-30', 'Excellent offensive efficiency with 27 points.', 8),
+(2, 1, 1, '2024-11-30', 'Strong leadership in the game with 27 points.', 7),
+(3, 1, 1, '2024-11-30', 'Data analysis shows Player #9 was efficient.', 7),
+(1, 2, 1, '2024-11-30', 'Displayed excellent all-round capabilities.', 9),
+(2, 2, 1, '2024-11-30', 'The player exhibited a great leadership.', 9),
+(3, 2, 1, '2024-11-30', 'Efficient performance, 31 points, few fouls.', 9),
+(1, 1, 2, '2025-03-08', 'Scored 23 points, solid efficiency.', 7),
+(2, 1, 2, '2025-03-08', 'Scored 23 points, ok leadership, improve defense.', 6),
+(3, 1, 2, '2025-03-08', 'Showed solid offense, improve turnovers.', 6),
+(1, 2, 2, '2025-03-08', 'Scored 17 points, optimize efficiency.', 7),
+(2, 2, 2, '2025-03-08', 'Fair leadership, improve consistency.', 6),
+(3, 2, 2, '2025-03-08', '7 field goals and deceny PT, improve consistency.', 6);

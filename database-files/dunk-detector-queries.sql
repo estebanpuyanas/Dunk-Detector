@@ -329,8 +329,8 @@ WHERE firstName = 'James' && middleName = 'Frank' && lastName = 'Harden';
 INSERT INTO matches (homeTeamId, awayTeamId, date, time, location, homeScore, awayScore, finalScore)
 VALUES (1, 2, '2025-04-01', '19:30:00', 'Chicago', 100, 95, '100-95');
 
--- 4) INSERT players (firstName, middleName, lastName, agentId, position, teamId, height,
--- weight, dob, injuryId)
+-- 4) As a system administrator, I need to create simple data entry forms so I can manually 
+--add new players to the system.
 INSERT players (firstName, middleName, lastName, agentId, position, teamId, height, weight, dob, injuryId)
 VALUES ('Luka', NULL, 'Doncic', 1, 'Point Guard', 1, 198, 300, '1999-02-28', 3);
 

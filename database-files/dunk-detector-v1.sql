@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS dunkDetector;
 
 USE dunkDetector;
 
-# User table:
+-- User table:
 CREATE TABLE users
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -19,7 +19,7 @@ CREATE TABLE users
     INDEX (id)
 );
 
-# Agent table:
+-- Agent table:
 CREATE TABLE agents
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -34,7 +34,7 @@ CREATE TABLE agents
     INDEX (id)
 );
 
-# Coach table:
+-- Coach table:
 CREATE TABLE coaches
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -56,7 +56,7 @@ CREATE TABLE coaches
     INDEX (teamId)
 );
 
-# General Manager table:
+-- General Manager table:
 CREATE TABLE general_managers
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -73,7 +73,7 @@ CREATE TABLE general_managers
     INDEX (teamId)
 );
 
-# Team table:
+-- Team table:
 CREATE TABLE teams
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -98,7 +98,7 @@ CREATE TABLE teams
     index (id)
 );
 
-# Injuries table:
+-- Injuries table:
 CREATE TABLE injuries
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -111,7 +111,7 @@ CREATE TABLE injuries
     INDEX (playerId)
 );
 
-# Player table:
+-- Player table:
 CREATE TABLE players
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -143,7 +143,7 @@ CREATE TABLE players
     index (teamId)
 );
 
-# Matches table:
+-- Matches table:
 CREATE TABLE matches
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -169,7 +169,7 @@ CREATE TABLE matches
     INDEX (awayTeamId)
 );
 
-# Game plans table:
+-- Game plans table:
 CREATE TABLE gameplans
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -191,7 +191,7 @@ CREATE TABLE gameplans
     INDEX (matchId)
 );
 
-# Stats table:
+-- Stats table:
 CREATE TABLE statistics
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -222,7 +222,7 @@ CREATE TABLE statistics
     INDEX (matchId)
 );
 
-# Reports table:
+-- Reports table:
 CREATE TABLE reports
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -238,7 +238,7 @@ CREATE TABLE reports
     INDEX (authorId)
 );
 
-# Scout reports table:
+-- Scout reports table:
 CREATE TABLE scout_reports
 (
     id integer AUTO_INCREMENT PRIMARY KEY,

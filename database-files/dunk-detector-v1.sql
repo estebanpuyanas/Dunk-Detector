@@ -12,7 +12,7 @@ CREATE TABLE users
     lastName varchar(50) NOT NULL,
     mobile varchar(15),
     email varchar(75) UNIQUE NOT NULL,
-    role enum ('admin', 'agent', 'player', 'system administrator', 'data analyst', 'general manager') NOT NULL, # Adjust as needed
+    role enum ('admin', 'agent', 'player', 'system administrator', 'data analyst', 'general manager', 'coach') NOT NULL, # Adjust as needed
 
     INDEX (mobile),
     INDEX (email),
@@ -270,7 +270,8 @@ CREATE TABLE scout_reports
 INSERT INTO users (firstName, middleName, lastName, mobile, email, role)
 VALUES("Alex", NULL, "Montgomery", "908-324-9005", "Alex_Montgomery@gmail.com", 'system administrator'),
 ("Patrick", "James", "Carter", "732-735-7372", "PJCarter.73@gmail.com", 'general manager'),
-("Phillip", "Robin", "Smith", "508-564-1024", "Psmith_10@yahoo.com", 'data analyst');
+("Phillip", "Robin", "Smith", "508-564-1024", "Psmith_10@yahoo.com", 'data analyst'),
+('Mark', NULL, 'Hansen', '332-677-2124', 'mark.hansen@gmail.com', 'coach');
 
 INSERT INTO agents (firstName, middleName, lastName, mobile, email)
 VALUES("Liam", NULL, "Kerney", "233-291-2034", "liam_kerney67@gmail.com"),

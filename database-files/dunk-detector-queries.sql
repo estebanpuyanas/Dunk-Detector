@@ -28,9 +28,9 @@ LEFT JOIN statistics SR ON SR.playerId = R.id;
 -- 3) As a coach, I would like to view detailed scouting reports of my upcoming opponents so that
 -- I can develop strategies tailored to their strengths and weaknesses.
 SELECT
-opp_P.firstname AS opponent_firstname,
-opp_P.lastname AS opponent_lastname,
-sr.content AS scouting_report
+    opp_P.firstname AS opponent_firstname,
+    opp_P.lastname AS opponent_lastname,
+    sr.content AS scouting_report
 FROM coaches C
 JOIN teams T ON C.teamId = T.id
 JOIN matches M ON (M.homeTeamId = T.id OR M.awayTeamId = T.id)
@@ -44,7 +44,10 @@ ORDER BY M.date;
 
 -- 4) As a coach, I want to generate and export the scouting reports in a printable and legible format
 -- so that I can share them with my coaching staff during meetings
-SELECT SR.reportDate, SR.content, SR.playerId
+SELECT 
+    SR.reportDate, 
+    SR.content, 
+    SR.playerId
 FROM scout_reports SR
 ORDER BY SR.reportDate;
 
@@ -133,7 +136,10 @@ SELECT P.firstname, P.lastname, A.*
 
 -- 5) As a data analyst, I need a feature that suggests statistically similar players based on
 -- advanced metrics so that I can identify underrated talents or trade targets.
-SELECT P.firstname, P.lastname, S.*
+SELECT 
+    P.firstname, 
+    P.lastname, 
+    S.*
 FROM players P
 JOIN statistics S ON P.id = S.playerId
 ORDER BY P.lastname, P.firstname;
@@ -167,7 +173,10 @@ ORDER BY R.reportDate DESC;
 
 -- 2) As a General Manager, I need to access injury history reports so that I can assess
 -- long-term durability of each player.
-SELECT I.*, p.firstname, p.lastname
+SELECT 
+    I.*, 
+    p.firstname, 
+    p.lastname
 FROM general_managers gm JOIN teams t on gm.teamId = t.id
 JOIN players p ON p.teamId = t.id
 JOIN injuries I ON I.id = p.injuryId;
@@ -234,7 +243,10 @@ ORDER BY R.reportDate DESC;
 
 -- 5) As a general manager, I need to generate customizable reports based on specific stats
 -- (shooting efficiency, # of rebounds, etc) so that I can tailor my scouting approach to my team’s priorities.
-SELECT P.firstname, P.lastname, S.*
+SELECT 
+    P.firstname, 
+    P.lastname, 
+    S.*
 FROM players P
 JOIN statistics S ON P.id = S.playerId
 ORDER BY P.lastname, P.firstname;

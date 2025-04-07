@@ -8,11 +8,23 @@ st.write("# About this App")
 
 st.markdown (
     """
-    This is a demo app for CS 3200 Course Project.  
+    Welcome to The Dunk Detector 🏀! 
 
-    The goal of this demo is to provide information on the tech stack 
-    being used as well as demo some of the features of the various platforms. 
+    We built this application for our CS3200 - Database Design course at Northeastern University. 
+    This application is designed to provide general managers, coaches, socuts, and data analysts 
+    with the tools they need to analyze player performance, statistics, and trends
+    to make informed decisions about player acquisitions, trades, and game strategies.  
 
-    Stay tuned for more information and features to come!
+    The application is built using Python, using Streamlit for the front-end, Flask for the back-end, and MySQL for the database.  
+   
+    We are a team of 5 students:
+    - Komdean Masoumi
+    - Gokul Ramanan
+    - Jerome Rodrigo
+    - Esteban Puyana
+    - Annie Wong
+
+    We hope you enjoy using this application as much as we enjoyed building it!
+
     """
         )

@@ -1,16 +1,19 @@
+CREATE DATABASE IF NOT EXISTS dunkDetector;
 USE dunkDetector;
 
 -- Persona 1:
 -- 1) As a coach, I want to keep track of my players’ game performance and other key statistics over the
 -- season to identify trends and improvement areas.
+-- TODO FIX RETURNS DUPLICATED ROWS
 SELECT P.firstname, P.lastname, S.*
 FROM coaches C
-JOIN teams T ON C.Id = T.CoachId
-JOIN players P ON P.teamId = C.teamId
-JOIN statistics S ON S.playerId = P.id;
+         JOIN teams T ON C.Id = T.CoachId
+         JOIN players P ON P.teamId = C.teamId
+         JOIN statistics S ON S.playerId = P.id;
 
 -- 2) As a coach, I want to compare my players’ statistics with potential recruiters so I can make informed,
 -- data-driven decisions about scouting and team development.
+-- TODO FIX RETURNS DUPLICATED ROWS
 SELECT
     P.firstname AS player_firstname,
     P.lastname AS player_lastname,
@@ -19,34 +22,35 @@ SELECT
     R.lastname AS recruit_lastname,
     SR.*  -- Selecting all statistics for the recruit
 FROM coaches C
-JOIN teams T ON C.id = T.coachId
-JOIN players P ON P.teamId = T.id
-JOIN statistics S ON P.id = S.playerId
-LEFT JOIN players R ON R.id = @scouted_player_id
-LEFT JOIN statistics SR ON SR.playerId = R.id;
+         JOIN teams T ON C.id = T.coachId
+         JOIN players P ON P.teamId = T.id
+         JOIN statistics S ON P.id = S.playerId
+         LEFT JOIN players R ON R.id = @scouted_player_id
+         LEFT JOIN statistics SR ON SR.playerId = R.id;
 
 -- 3) As a coach, I would like to view detailed scouting reports of my upcoming opponents so that
 -- I can develop strategies tailored to their strengths and weaknesses.
+-- TODO FIX RETURNS NO ROWS?
 SELECT
     opp_P.firstname AS opponent_firstname,
     opp_P.lastname AS opponent_lastname,
     sr.content AS scouting_report
 FROM coaches C
-JOIN teams T ON C.teamId = T.id
-JOIN matches M ON (M.homeTeamId = T.id OR M.awayTeamId = T.id)
-JOIN players opp_P ON (
+         JOIN teams T ON C.teamId = T.id
+         JOIN matches M ON (M.homeTeamId = T.id OR M.awayTeamId = T.id)
+         JOIN players opp_P ON (
     (M.homeTeamId = T.id AND opp_P.teamId = M.awayTeamId) OR
     (M.awayTeamId = T.id AND opp_P.teamId = M.homeTeamId)
-)
-JOIN scout_reports sr ON sr.playerId = opp_P.id
+    )
+         JOIN scout_reports sr ON sr.playerId = opp_P.id
 WHERE M.date > CURDATE()  -- Filter for future games
 ORDER BY M.date;
 
 -- 4) As a coach, I want to generate and export the scouting reports in a printable and legible format
 -- so that I can share them with my coaching staff during meetings
-SELECT 
-    SR.reportDate, 
-    SR.content, 
+SELECT
+    SR.reportDate,
+    SR.content,
     SR.playerId
 FROM scout_reports SR
 ORDER BY SR.reportDate;
@@ -68,7 +72,7 @@ SELECT
     SUM(s.threePointers) AS total_three_pointers,
     COUNT(s.matchId) AS total_matches
 FROM players p
-JOIN statistics s ON p.id = s.playerId
+         JOIN statistics s ON p.id = s.playerId
 GROUP BY p.firstName, p.id, p.lastName, p.position
 HAVING total_matches > 1
 ORDER BY total_three_pointers DESC;
@@ -76,18 +80,20 @@ ORDER BY total_three_pointers DESC;
 -- Persona 2:
 -- 1) As a data analyst, I need to filter player statistics based on minutes played
 -- versus total season stats so that I can avoid misleading conclusions from small sample sizes.
+-- TODO FIX RETURNS DUPLICATED ROWS
 SELECT
-  	P.firstname,
+    P.firstname,
     P.lastname,
     S.*
 FROM players P
-JOIN statistics S ON P.id = S.playerId
-JOIN matches m ON S.matchId = m.id
+         JOIN statistics S ON P.id = S.playerId
+         JOIN matches m ON S.matchId = m.id
 WHERE S.totalPlayTime >= '00:30:00'  -- Minimum minutes played in a single game, adjust this as needed
 ORDER BY m.date DESC;
 
 -- 2) As a data analyst, I want to compare two players side by side using advanced visualizations so that
 -- I can quickly assess their strengths and weaknesses.
+-- TODO FIX RETURNS NO ROWS?
 SELECT
     P1.firstname AS player1_firstname,
     P1.lastname AS player1_lastname,
@@ -99,10 +105,10 @@ SELECT
     S2.threePointers AS player2_three_pointers,
     m.date AS match_date
 FROM statistics S1
-JOIN players P1 ON P1.id = S1.playerId
-JOIN statistics S2 ON S1.matchId = S2.matchId AND S1.playerId != S2.playerId
-JOIN players P2 ON P2.id = S2.playerId
-JOIN matches m ON S1.matchId = m.id
+         JOIN players P1 ON P1.id = S1.playerId
+         JOIN statistics S2 ON S1.matchId = S2.matchId AND S1.playerId != S2.playerId
+         JOIN players P2 ON P2.id = S2.playerId
+         JOIN matches m ON S1.matchId = m.id
 WHERE (P1.id = @player1_id AND P2.id = @player2_id) OR (P1.id = @player2_id AND P2.id = @player1_id)
 ORDER BY m.date DESC;
 
@@ -125,35 +131,37 @@ SELECT
     SUM(s.freeThrows) / NULLIF(SUM(s.totalPoints), 0) AS ft_percentage,
     SEC_TO_TIME(SUM(TIME_TO_SEC(s.totalPlayTime)) / COUNT(DISTINCT s.matchId)) AS avg_play_time
 FROM statistics s
-JOIN players p ON s.playerId = p.id
+         JOIN players p ON s.playerId = p.id
 GROUP BY p.id, p.firstname, p.lastname
 ORDER BY points_per_game DESC;
 
 -- 4) As a data analyst, I want to access player contract details and agent information so that I
 -- can evaluate potential signings from both performance and salary cap perspectives.
 SELECT P.firstname, P.lastname, A.*
-	FROM players P JOIN agents A ON P.agentId = A.id
+FROM players P JOIN agents A ON P.agentId = A.id;
 
 -- 5) As a data analyst, I need a feature that suggests statistically similar players based on
 -- advanced metrics so that I can identify underrated talents or trade targets.
-SELECT 
-    P.firstname, 
-    P.lastname, 
+-- TODO FIX RETURNS DUPLICATED ROWS
+SELECT
+    P.firstname,
+    P.lastname,
     S.*
 FROM players P
-JOIN statistics S ON P.id = S.playerId
+         JOIN statistics S ON P.id = S.playerId
 ORDER BY P.lastname, P.firstname;
 
 -- 6) As a data analyst, I want to take notes and flag players directly in the platform so that I can
 -- track insights without switching between different tools.
 INSERT INTO reports (authorId, reportDate, content)
 VALUES
-(3, '2024-04-01', 'Player #1 showed excellent offensive skills.'),
-(3, '2024-04-01', 'Player #2 struggles with consistency.');
+    (3, '2024-04-01', 'Player #1 showed excellent offensive skills.'),
+    (3, '2024-04-01', 'Player #2 struggles with consistency.');
 
 -- Persona 3
 -- 1)  As a General Manager, I need a dashboard summarizing top-tier college basketball prospects so
 -- that I can focus on selecting the most promising players.
+-- TODO FIX RETURNS NO ROWS?
 SELECT
     P.firstName AS player_firstname,
     P.lastName AS player_lastname,
@@ -164,26 +172,27 @@ SELECT
     R.content AS report_content,
     R.reportDate
 FROM reports R
-JOIN users u ON R.authorId = u.id
-JOIN scout_reports sr ON u.id = sr.authorId
-JOIN players P ON sr.playerId = P.id
-JOIN teams T ON T.id = P.teamId
+         JOIN users u ON R.authorId = u.id
+         JOIN scout_reports sr ON u.id = sr.authorId
+         JOIN players P ON sr.playerId = P.id
+         JOIN teams T ON T.id = P.teamId
 WHERE T.isCollege = TRUE
 ORDER BY R.reportDate DESC;
 
 -- 2) As a General Manager, I need to access injury history reports so that I can assess
 -- long-term durability of each player.
-SELECT 
-    I.*, 
-    p.firstname, 
+SELECT
+    I.*,
+    p.firstname,
     p.lastname
 FROM general_managers gm JOIN teams t on gm.teamId = t.id
-JOIN players p ON p.teamId = t.id
-JOIN injuries I ON I.id = p.injuryId;
+                         JOIN players p ON p.teamId = t.id
+                         JOIN injuries I ON I.id = p.injuryId;
 
 -- 3) As a General Manager, I need to compare current prospects to past NBA players with
 -- similar statistical profiles so that I can predict their potential success in the league.
 -- (Assuming @player1_id is the current college player's ID and @player2_id is the past NBA player's ID)
+-- TODO FIX RETURNS NO ROWS?
 SELECT
     P1.firstName AS current_player_firstname,
     P1.lastName AS current_player_lastname,
@@ -214,9 +223,9 @@ SELECT
     S2.fouls AS nba_player_fouls
 
 FROM players P1
-JOIN statistics S1 ON P1.id = S1.playerId
-JOIN players P2 ON P2.id = @player2_id
-JOIN statistics S2 ON P2.id = S2.playerId
+         JOIN statistics S1 ON P1.id = S1.playerId
+         JOIN players P2 ON P2.id = @player2_id
+         JOIN statistics S2 ON P2.id = S2.playerId
 
 WHERE P1.id = @player1_id
 ORDER BY S1.totalPoints DESC
@@ -224,6 +233,7 @@ LIMIT 10;
 
 -- 4) As a General Manager, I need to filter players based on skill archetypes so that I can
 -- focus on prospects who meet my team’s goals/needs.
+-- TODO FIX RETURNS DUPLICATED ROWS
 SELECT
     P.firstName AS player_firstname,
     P.lastName AS player_lastname,
@@ -235,25 +245,27 @@ SELECT
     sr.content AS scout_report_content,
     R.reportDate
 FROM reports R
-JOIN users u ON R.authorId = u.id
-JOIN scout_reports sr ON u.id = sr.authorId
-JOIN players P on sr.playerId = P.id
-JOIN teams T ON T.id = P.teamId
+         JOIN users u ON R.authorId = u.id
+         JOIN scout_reports sr ON u.id = sr.authorId
+         JOIN players P on sr.playerId = P.id
+         JOIN teams T ON T.id = P.teamId
 ORDER BY R.reportDate DESC;
 
 -- 5) As a general manager, I need to generate customizable reports based on specific stats
 -- (shooting efficiency, # of rebounds, etc) so that I can tailor my scouting approach to my team’s priorities.
-SELECT 
-    P.firstname, 
-    P.lastname, 
+-- TODO FIX RETURNS DUPLICATED ROWS
+SELECT
+    P.firstname,
+    P.lastname,
     S.*
 FROM players P
-JOIN statistics S ON P.id = S.playerId
+         JOIN statistics S ON P.id = S.playerId
 ORDER BY P.lastname, P.firstname;
 
 -- 6) As a general manager, I need to see how players perform in high-pressure games (March Madness, conference
 -- semis/finals) so that I can evaluate their ability to handle NBA-level intensity.
 -- Assuming @start_date and @end_date are provided by the user
+-- TODO FIX RETURNS NO ROWS?
 SELECT
     P.firstName AS player_firstname,
     P.lastName AS player_lastname,
@@ -263,8 +275,8 @@ SELECT
     M.homeScore,               -- Home team score
     M.awayScore                -- Away team score
 FROM players P
-JOIN statistics S ON P.id = S.playerId
-JOIN matches M ON S.matchId = M.id
+         JOIN statistics S ON P.id = S.playerId
+         JOIN matches M ON S.matchId = M.id
 WHERE M.date BETWEEN @start_date AND @end_date  -- Filter for games within the date range
 ORDER BY M.date DESC;
 
@@ -277,21 +289,22 @@ SELECT
     SR.reportDate AS report_date,
     SR.content AS report_content
 FROM scout_reports SR
-JOIN players P ON SR.playerId = P.id
-JOIN users U ON SR.authorId = U.id  -- Assuming there's a 'users' table and 'userId' column in scout_reports
+         JOIN players P ON SR.playerId = P.id
+         JOIN users U ON SR.authorId = U.id  -- Assuming there's a 'users' table and 'userId' column in scout_reports
 WHERE U.role = 'Data Analyst'
 ORDER BY SR.reportDate DESC;
 
 -- 8) As a general manager, I need to have access to my coaches reports to see what he thinks the team is lacking,
 -- or which players he isn’t fond of anymore.
+-- TODO FIX RETURNS NO ROWS?
 SELECT
     P.firstName AS player_firstname,
     P.lastName AS player_lastname,
     SR.reportDate AS report_date,
     SR.content AS report_content
 FROM scout_reports SR
-JOIN players P ON SR.playerId = P.id
-JOIN users U ON SR.authorId = U.id
+         JOIN players P ON SR.playerId = P.id
+         JOIN users U ON SR.authorId = U.id
 WHERE U.role = 'Coach'
 ORDER BY SR.reportDate DESC;
 
@@ -304,8 +317,8 @@ SELECT
     SR.reportDate AS report_date,
     SR.content AS report_content
 FROM scout_reports SR
-JOIN players P ON SR.playerId = P.id
-JOIN users U ON SR.authorId = U.id
+         JOIN players P ON SR.playerId = P.id
+         JOIN users U ON SR.authorId = U.id
 WHERE U.role IN ('Data Analyst', 'Coach')
 ORDER BY SR.reportDate DESC;
 
@@ -329,8 +342,8 @@ WHERE firstName = 'James' && middleName = 'Frank' && lastName = 'Harden';
 INSERT INTO matches (homeTeamId, awayTeamId, date, time, location, homeScore, awayScore, finalScore)
 VALUES (1, 2, '2025-04-01', '19:30:00', 'Chicago', 100, 95, '100-95');
 
--- 4) As a system administrator, I need to create simple data entry forms so I can manually 
---add new players to the system.
+-- 4) As a system administrator, I need to create simple data entry forms so I can manually
+-- add new players to the system.
 INSERT players (firstName, middleName, lastName, agentId, position, teamId, height, weight, dob, injuryId)
 VALUES ('Luka', NULL, 'Doncic', 1, 'Point Guard', 1, 198, 300, '1999-02-28', 3);
 
@@ -342,7 +355,7 @@ DELETE FROM scout_reports WHERE authorId = 1;
 -- 6) As a system administrator, I need to develop a system that allows me to flag statistical
 -- anomalies or data inconsistencies that can be marked for review and or potential removal.
 UPDATE teams t
-JOIN players p ON t.id = p.teamId
+    JOIN players p ON t.id = p.teamId
 SET t.isProfessional = False
 WHERE p.id = 1;
 

@@ -55,7 +55,7 @@ if st.button("Act as Mike Thompson, a Basketball Coach",
     # finally, we ask streamlit to switch to another page, in this case, the 
     # landing page for this particular user type
     logger.info("Logging in as Coach Mike Thompson")
-    st.switch_page('pages/00_coach_Home.py') #TODO UPDATE THIS PAGE TO COACH NEEDS. 
+    st.switch_page('pages/00_coach_home.py') #TODO UPDATE THIS PAGE TO COACH NEEDS. 
 
 if st.button('Act as Phillip, a data anlyst for the New York Knicks', 
             type = 'primary', 
@@ -64,7 +64,7 @@ if st.button('Act as Phillip, a data anlyst for the New York Knicks',
     st.session_state['role'] = 'data_analyst'
     st.session_state['first_name'] = 'Phillip'
     logger.info("Logging in as Knicks Data Analyst Phillip")
-    st.switch_page('pages/10_data_analyst_Home.py') #TODO UPDATE THIS PAGE TO DATA ANALYST NEEDS.
+    st.switch_page('pages/10_data_analyst_home.py') #TODO UPDATE THIS PAGE TO DATA ANALYST NEEDS.
 
 if st.button('Act as Patrick Carter, an NBA General Manager', 
             type = 'primary', 
@@ -73,7 +73,7 @@ if st.button('Act as Patrick Carter, an NBA General Manager',
     st.session_state['role'] = 'general_manager'
     st.session_state['first_name'] = 'Patrick'
     logger.info("Logging in as GM Patrick Carter")
-    st.switch_page('pages/20_general_manager.py') #TODO UPDATE THIS PAGE TO GM NEEDS.
+    st.switch_page('pages/20_general_manager_home.py') #TODO UPDATE THIS PAGE TO GM NEEDS.
 
 if st.button('Act as Alex Montgomery, a System Administrator',
              type = 'primary', 
@@ -82,7 +82,7 @@ if st.button('Act as Alex Montgomery, a System Administrator',
         st.session_state['role'] = 'admin'
         st.session_state['first_name'] = 'Alex'
         logger.info("Logging in as System Admin Alex Montgomery")
-        st.switch_page('pages/30_system_admin.py') #TODO IMPLEMENT THIS PAGE.
+        st.switch_page('pages/30_system_admin_home.py') #TODO IMPLEMENT THIS PAGE.
 
 
 

@@ -17,35 +17,33 @@ def get_players():
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200
     return the_response
-
 #------------------------------------------------------------
 # Create a new player
 @players.route('/players', methods=['POST'])
 def create_player():
-    new_player_data = request.json
-    query = '''
+    player_data = request.json
+    query = """
         INSERT INTO players (firstName, middleName, lastName, agentId, position, teamId, height, weight, dob, injuryId)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    '''
+    """
     data = (
-        new_player_data['firstName'],
-        new_player_data.get('middleName'),
-        new_player_data['lastName'],
-        new_player_data['agentId'],
-        new_player_data['position'],
-        new_player_data['teamId'],
-        new_player_data['height'],
-        new_player_data['weight'],
-        new_player_data['dob'],
-        new_player_data.get('injuryId')
+        player_data.get('firstName'),
+        player_data.get('middleName'),
+        player_data.get('lastName'),
+        player_data.get('agentId'),
+        player_data.get('position'),
+        player_data.get('teamId'),
+        player_data.get('height'),
+        player_data.get('weight'),
+        player_data.get('dob'),
+        player_data.get('injuryId')
     )
     cursor = db.get_db().cursor()
     cursor.execute(query, data)
     db.get_db().commit()
     new_id = cursor.lastrowid
-    response = make_response(jsonify({'id': new_id}), 201)
+    response = make_response(jsonify({"id": new_id}), 201)
     return response
-
 #------------------------------------------------------------
 # Update player info for a particular player.
 # The player id should be included in the JSON payload.
@@ -77,7 +75,6 @@ def update_player():
     cursor.execute(query, data)
     db.get_db().commit()
     return 'player updated!'
-
 #------------------------------------------------------------
 # Get detail for a single player identified by player_id
 @players.route('/players/<int:player_id>', methods=['GET'])
@@ -93,7 +90,6 @@ def get_player(player_id):
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200
     return the_response
-
 #------------------------------------------------------------
 # Delete a player identified by player_id
 @players.route('/players/<int:player_id>', methods=['DELETE'])
@@ -103,3 +99,27 @@ def delete_player(player_id):
     cursor.execute("DELETE FROM players WHERE id = %s", (player_id,))
     db.get_db().commit()
     return 'player deleted!'
+#------------------------------------------------------------
+# Update a player's information partially
+@players.route('/players/<int:player_id>', methods=['PATCH'])
+def patch_player(player_id):
+    player_data = request.json
+    # Build update query dynamically based on sent keys.
+    fields = []
+    values = []
+    allowed_fields = ['firstName', 'middleName', 'lastName', 'agentId', 'position', 'teamId', 'height', 'weight', 'dob', 'injuryId']
+    for field in allowed_fields:
+        if field in player_data:
+            fields.append(f"{field} = %s")
+            values.append(player_data[field])
+    if not fields:
+        return make_response(jsonify({"error": "No valid fields provided"}), 400)
+    values.append(player_id)
+    query = "UPDATE players SET " + ", ".join(fields) + " WHERE id = %s"
+    cursor = db.get_db().cursor()
+    cursor.execute(query, tuple(values))
+    db.get_db().commit()
+    response = make_response(jsonify({"message": "Player partially updated"}))
+    response.status_code = 200
+    return response
+#------------------------------------------------------------

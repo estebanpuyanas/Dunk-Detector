@@ -5,6 +5,7 @@ players = Blueprint('players', __name__)
 
 #------------------------------------------------------------
 # Get all players from the system
+# TESTED - PASSING POSTMAN REQUEST
 @players.route('/players', methods=['GET'])
 def get_players():
     cursor = db.get_db().cursor()
@@ -19,6 +20,7 @@ def get_players():
     return the_response
 #------------------------------------------------------------
 # Create a new player
+# TESTED - FAILING POSTMAN REQUEST 404 RESOURCE NOT FOUND
 @players.route('/players', methods=['POST'])
 def create_player():
     player_data = request.json
@@ -47,6 +49,7 @@ def create_player():
 #------------------------------------------------------------
 # Update player info for a particular player.
 # The player id should be included in the JSON payload.
+# TESTED - FAILING POSTMAN REQUEST 404 RESOURCE NOT FOUND & 405 METHOD NOT ALLOWED
 @players.route('/players', methods=['PUT'])
 def update_player():
     current_app.logger.info('PUT /players route')
@@ -77,6 +80,7 @@ def update_player():
     return 'player updated!'
 #------------------------------------------------------------
 # Get detail for a single player identified by player_id
+# TESTED - PASSING POSTMAN REQUEST
 @players.route('/players/<int:player_id>', methods=['GET'])
 def get_player(player_id):
     current_app.logger.info(f'GET /players/{player_id} route')
@@ -92,6 +96,7 @@ def get_player(player_id):
     return the_response
 #------------------------------------------------------------
 # Delete a player identified by player_id
+# TESTED - PASSING POSTMAN REQUEST
 @players.route('/players/<int:player_id>', methods=['DELETE'])
 def delete_player(player_id):
     current_app.logger.info(f'DELETE /players/{player_id} route')
@@ -101,6 +106,7 @@ def delete_player(player_id):
     return 'player deleted!'
 #------------------------------------------------------------
 # Update a player's information partially
+# TESTED - PASSING POSTMAN REQUEST (ONLY UPDATED 2 FIELDS, WILL NEED INCREMENTAL TESTING)
 @players.route('/players/<int:player_id>', methods=['PATCH'])
 def patch_player(player_id):
     player_data = request.json
@@ -123,3 +129,45 @@ def patch_player(player_id):
     response.status_code = 200
     return response
 #------------------------------------------------------------
+
+# FORMATS BEING USED FOR REQUESTS:
+'''
+GET ALL PLAYERS: localhost:4000/pl/players
+GET PLAYER BY ID: localhost:4000/pl/players/<player_id>
+DELETE PLAYER: localhost:4000/pl/players/<player_id>
+
+POST NEW PLAYER: localhost:4000/pl/players
+{
+    "firstName": "LeBron",
+    "middleName": "Raymone",
+    "lastName": "James",
+    "agentId": 1,
+    "position": "Small Forward",
+    "teamId": 1,
+    "height": 206,
+    "weight": 113,
+    "dob": "1984-12-30",
+    "injuryId": null
+}
+
+PUT (FULL UPDATE) PLAYER: localhost:4000/pl/players
+{
+    "firstName": "LeBron",
+    "middleName": "Raymone",
+    "lastName": "James",
+    "agentId": 1,
+    "position": "Small Forward",
+    "teamId": 1,
+    "height": 207,
+    "weight": 114,
+    "dob": "1984-12-30",
+    "injuryId": null
+}
+
+PATCH (PARTIAL UPDATE) PLAYER: localhost:4000/pl/players/<player_id>
+{
+    "weight": 115,
+    "height": 208
+}
+(add as many params as required in the player update). 
+'''

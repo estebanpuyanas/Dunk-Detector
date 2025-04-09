@@ -4,7 +4,6 @@ from backend.db_connection import db
 from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.simple.simple_routes import simple_routes
-from backend.gameplans.gameplans_routes import gameplans
 import os
 from dotenv import load_dotenv
 
@@ -42,6 +41,7 @@ def create_app():
     app.logger.info('current_app(): registering blueprints with Flask app object.')   
     app.register_blueprint(simple_routes)
     app.register_blueprint(players,     url_prefix='/pl')
+    app.register_blueprint(playerStatsByMinutes, url_prefix = '/plstmin')
     app.register_blueprint(users, url_prefix='/u')
     app.register_blueprint(gameplans, url_prefix='/gp')
 

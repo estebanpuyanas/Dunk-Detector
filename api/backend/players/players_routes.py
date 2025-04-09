@@ -4,8 +4,9 @@ from backend.db_connection import db
 players = Blueprint('players', __name__)
 
 #------------------------------------------------------------
-# Get all players from the system
+# Get all players from the system:
 # TESTED - PASSING POSTMAN REQUEST
+
 @players.route('/players', methods=['GET'])
 def get_players():
     cursor = db.get_db().cursor()
@@ -19,8 +20,9 @@ def get_players():
     the_response.status_code = 200
     return the_response
 #------------------------------------------------------------
-# Create a new player
+# Create a new player:
 # TESTED - FAILING POSTMAN REQUEST 404 RESOURCE NOT FOUND
+
 @players.route('/players', methods=['POST'])
 def create_player():
     player_data = request.json
@@ -47,9 +49,10 @@ def create_player():
     response = make_response(jsonify({"id": new_id}), 201)
     return response
 #------------------------------------------------------------
-# Update player info for a particular player.
+# Update player info for a particular player:
 # The player id should be included in the JSON payload.
 # TESTED - FAILING POSTMAN REQUEST 404 RESOURCE NOT FOUND & 405 METHOD NOT ALLOWED
+
 @players.route('/players', methods=['PUT'])
 def update_player():
     current_app.logger.info('PUT /players route')
@@ -79,8 +82,9 @@ def update_player():
     db.get_db().commit()
     return 'player updated!'
 #------------------------------------------------------------
-# Get detail for a single player identified by player_id
+# Get detail for a single player identified by player_id:
 # TESTED - PASSING POSTMAN REQUEST
+
 @players.route('/players/<int:player_id>', methods=['GET'])
 def get_player(player_id):
     current_app.logger.info(f'GET /players/{player_id} route')
@@ -95,8 +99,9 @@ def get_player(player_id):
     the_response.status_code = 200
     return the_response
 #------------------------------------------------------------
-# Delete a player identified by player_id
+# Delete a player identified by player_id:
 # TESTED - PASSING POSTMAN REQUEST
+
 @players.route('/players/<int:player_id>', methods=['DELETE'])
 def delete_player(player_id):
     current_app.logger.info(f'DELETE /players/{player_id} route')
@@ -105,8 +110,9 @@ def delete_player(player_id):
     db.get_db().commit()
     return 'player deleted!'
 #------------------------------------------------------------
-# Update a player's information partially
+# Update a player's information partially:
 # TESTED - PASSING POSTMAN REQUEST (ONLY UPDATED 2 FIELDS, WILL NEED INCREMENTAL TESTING)
+
 @players.route('/players/<int:player_id>', methods=['PATCH'])
 def patch_player(player_id):
     player_data = request.json

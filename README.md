@@ -8,6 +8,7 @@ For example, coaches will be able to pull and compare their players' statistics 
 1. Revise failing tests in `players_routes.py` and fix. 
 2. Revise how to bring back `dunkDetector-queries.sql` if needed without braking container build. 
 3. Consider alternative prefixing format for API routes in `rest_entry.py` and update accordingly.
+4. Reformat API queries that return all information from one or more tables to `SELECT * FROM Table1, Table2, etc` if it works better than naming all query params. 
  
 EXPAND AS NEEDED 
 

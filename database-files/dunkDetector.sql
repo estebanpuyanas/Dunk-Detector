@@ -222,32 +222,17 @@ CREATE TABLE statistics
     INDEX (matchId)
 );
 
--- Reports table:
+-- reports table
 CREATE TABLE reports
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
     authorId integer NOT NULL,
     reportDate date NOT NULL,
     content varchar(50) NOT NULL,
-
-    FOREIGN KEY (authorId) REFERENCES users (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    INDEX (id),
-    INDEX (authorId)
-);
-
--- Scout reports table:
-CREATE TABLE scout_reports
-(
-    id integer AUTO_INCREMENT PRIMARY KEY,
-    authorId integer NOT NULL,
-    playerId integer NOT NULL,
-    matchId integer NOT NULL,
-    reportDate date NOT NULL,
-    content varchar(50) NOT NULL,
-    playerRating integer NOT NULL,
+    playerId integer NULL,           -- Nullable to handle scout reports without player association
+    matchId integer NULL,            -- Nullable to handle scout reports without match association
+    playerRating integer NULL,       -- Nullable to handle non-scout reports
+    reportType enum('general', 'scout') NOT NULL,  -- Differentiates between general reports and scout reports
 
     FOREIGN KEY (authorId) REFERENCES users (id)
         ON UPDATE RESTRICT
@@ -263,7 +248,8 @@ CREATE TABLE scout_reports
 
     INDEX (id),
     INDEX (authorId),
-    INDEX (playerId)
+    INDEX (playerId),
+    INDEX (matchId)
 );
 
 -- Insertings values for each table
@@ -312,22 +298,20 @@ VALUES (1, 1, 27, 11, 3, 2, 1, 5, 4, 3, 2, '00:38:00', 1),
        (2, 1, 31, 12, 6, 3, 0, 6, 4, 5, 1, '00:35:00', 2),
        (2, 2, 17, 7, 2, 3, 0, 8, 2, 4, 1, '00:38:00', 1);
 
-INSERT INTO reports (authorId, reportDate, content)
-VALUES (1, '2024-11-30', 'LA vs Boston - Sys admin POV'),
-       (2, '2024-11-30', 'LA vs Boston - GM POV'),
-       (3, '2025-03-08', 'Boston vs LA - Data Analyst POV');
-
-INSERT INTO scout_reports (authorId, playerId, matchId, reportDate, content, playerRating)
+INSERT INTO reports (authorId, reportDate, content, playerId, matchId, playerRating, reportType)
 VALUES
-    (1, 1, 1, '2024-11-30', 'Excellent offensive efficiency with 27 points.', 8),
-    (2, 1, 1, '2024-11-30', 'Strong leadership in the game with 27 points.', 7),
-    (3, 1, 1, '2024-11-30', 'Data analysis shows Player #9 was efficient.', 7),
-    (1, 2, 1, '2024-11-30', 'Displayed excellent all-round capabilities.', 9),
-    (2, 2, 1, '2024-11-30', 'The player exhibited a great leadership.', 9),
-    (3, 2, 1, '2024-11-30', 'Efficient performance, 31 points, few fouls.', 9),
-    (1, 1, 2, '2025-03-08', 'Scored 23 points, solid efficiency.', 7),
-    (2, 1, 2, '2025-03-08', 'Scored 23 points, ok leadership, improve defense.', 6),
-    (3, 1, 2, '2025-03-08', 'Showed solid offense, improve turnovers.', 6),
-    (1, 2, 2, '2025-03-08', 'Scored 17 points, optimize efficiency.', 7),
-    (2, 2, 2, '2025-03-08', 'Fair leadership, improve consistency.', 6),
-    (3, 2, 2, '2025-03-08', '7 field goals and deceny PT, improve consistency.', 6);
+(1, '2024-11-30', 'LA vs Boston - Sys admin POV', NULL, NULL, NULL, 'general'),
+(2, '2024-11-30', 'LA vs Boston - GM POV', NULL, NULL, NULL, 'general'),
+(3, '2025-03-08', 'Boston vs LA - Data Analyst POV', NULL, NULL, NULL, 'general'),
+(1, '2024-11-30', 'Excellent offensive efficiency with 27 points.', 1, 1, 8, 'scout'),
+(2, '2024-11-30', 'Strong leadership in the game with 27 points.', 1, 1, 7, 'scout'),
+(3, '2024-11-30', 'Data analysis shows Player #9 was efficient.', 1, 1, 7, 'scout'),
+(1, '2024-11-30', 'Displayed excellent all-round capabilities.', 2, 1, 9, 'scout'),
+(2, '2024-11-30', 'The player exhibited a great leadership.', 2, 1, 9, 'scout'),
+(3, '2024-11-30', 'Efficient performance, 31 points, few fouls.', 2, 1, 9, 'scout'),
+(1, '2025-03-08', 'Scored 23 points, solid efficiency.', 1, 2, 7, 'scout'),
+(2, '2025-03-08', 'Scored 23 points, ok leadership, improve defense.', 1, 2, 6, 'scout'),
+(3, '2025-03-08', 'Showed solid offense, improve turnovers.', 1, 2, 6, 'scout'),
+(1, '2025-03-08', 'Scored 17 points, optimize efficiency.', 2, 2, 7, 'scout'),
+(2, '2025-03-08', 'Fair leadership, improve consistency.', 2, 2, 6, 'scout'),
+(3, '2025-03-08', '7 field goals and deceny PT, improve consistency.', 2, 2, 6, 'scout');

@@ -5,6 +5,7 @@ users = Blueprint('users', __name__)
 
 #------------------------------------------------------------
 # Get all users from the system: 
+# TESTED - PASSING POSTMAN REQUEST
 
 @users.route('/users', methods=['GET'])
 def get_all_users():
@@ -19,6 +20,7 @@ def get_all_users():
     return the_response
 #------------------------------------------------------------
 #Put a new user into the system:
+# TESTED - PASSING POSTMAN REQUEST
 
 @users.route('/users', methods=['POST'])
 def create_user():
@@ -43,6 +45,7 @@ def create_user():
     return response
 #------------------------------------------------------------
 # Update user info for a user given the id:
+# TESTED - PASSING POSTMAN REQUEST
 
 @users.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
@@ -70,6 +73,8 @@ def update_user(user_id):
     return response
 #------------------------------------------------------------
 # Do dynamic partial update of user info for a user given the id:
+# TESTED - PASSING POSTMAN REQUEST 
+
 @users.route('/users/<int:user_id>', methods=['PATCH'])
 def patch_user(user_id):
     user_data = request.json
@@ -87,11 +92,12 @@ def patch_user(user_id):
     cursor = db.get_db().cursor()
     cursor.execute(query, tuple(values))
     db.get_db().commit()
-    response = make_response(jsonify({"message": "The following fields were updated for user id " + str(user_id) + ": " + ", ".join(fields)}))
+    response = make_response(jsonify({"message": "The following fields were updated for user id " + str(user_id) + ": " + ", ".join(fields)})) #fix the formatting on reponse. 
     response.status_code = 200
     return response
 #------------------------------------------------------------
 # Delete user from the system given the id: 
+# TESTED - PASSING POSTMAN REQUEST
 
 @users.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 from backend.db_connection import db
 
-gamePlans = Blueprint('gamePlans', __name__)
+gameplans = Blueprint('gameplans', __name__)
 
 #------------------------------------------------------------
 # Get all game plans from the system:

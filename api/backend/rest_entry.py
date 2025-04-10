@@ -6,6 +6,7 @@ from backend.products.products_routes import products
 from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.simple.simple_routes import simple_routes
+from backend.gameplans.gameplans_routes import gameplans
 import os
 from dotenv import load_dotenv
 

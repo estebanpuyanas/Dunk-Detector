@@ -20,3 +20,8 @@ if st.button('Roster Look Up',
              type='primary',
              use_container_width=True):
   st.switch_page('pages/22_player_roster.py')
+
+if st.button('Agent Look Up',
+             type='primary',
+             use_container_width=True):
+  st.switch_page('pages/23_agent_search.py')

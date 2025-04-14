@@ -42,9 +42,9 @@ def rosterSearch():
     )
 
 
-def ClassificationNav():
+def agentSearch():
     st.sidebar.page_link(
-        "pages/13_Classification.py", label="Classification Demo", icon="🌺"
+        "pages/23_agent_search.py", label="Agent Search", icon="🌺"
     )
 
 
@@ -87,7 +87,7 @@ def SideBarLinks(show_home=False):
         if st.session_state["role"] == "general_manager":
             GmSearch()
             rosterSearch()
-            ClassificationNav()
+            agentSearch()
 
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":

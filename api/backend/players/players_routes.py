@@ -99,6 +99,23 @@ def get_player(player_id):
     the_response.status_code = 200
     return the_response
 #------------------------------------------------------------
+# Get detail for a single player identified by team_id:
+# TESTED - PASSING POSTMAN REQUEST
+
+@players.route('/team_players/<int:team_id>', methods=['GET'])
+def get_team_player(team_id):
+    current_app.logger.info(f'GET /players/{team_id} route')
+    cursor = db.get_db().cursor()
+    cursor.execute('''
+        SELECT id, firstName, middleName, lastName, 
+               agentId, position, teamId, height, weight, dob, injuryId
+        FROM players WHERE teamId = %s
+    ''', (team_id,))
+    theData = cursor.fetchall()
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response    
+#------------------------------------------------------------
 # Delete a player identified by player_id:
 # TESTED - PASSING POSTMAN REQUEST
 

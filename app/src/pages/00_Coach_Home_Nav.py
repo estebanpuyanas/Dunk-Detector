@@ -14,21 +14,12 @@ st.write('')
 st.write('')
 st.write('### What would you like to do today?')
 
-'''
-template for switching to different pages 
-
-if st.button('View World Bank Data Visualization', 
-             type='primary',
-             use_container_width=True):
-  st.switch_page('pages/01_World_Bank_Viz.py')
-'''
-
 if st.button('View Other Team Stats', 
              type='primary',
              use_container_width=True):
   st.switch_page('pages/01_OtherTeamStats.py')
 
-if st.button('View All Gameplans', 
+if st.button('View/Make Gameplans', 
              type='primary',
              use_container_width=True):
   st.switch_page('pages/01_Gameplans_Home_Nav.py')

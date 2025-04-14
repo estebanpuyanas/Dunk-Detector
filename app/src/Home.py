@@ -73,7 +73,7 @@ if st.button('Act as Patrick Carter, an NBA General Manager',
     st.session_state['role'] = 'general_manager'
     st.session_state['first_name'] = 'Patrick'
     logger.info("Logging in as GM Patrick Carter")
-    st.switch_page('pages/20_general_manager_home.py') #TODO UPDATE THIS PAGE TO GM NEEDS.
+    st.switch_page('pages/20_general_manager_Home.py') #TODO UPDATE THIS PAGE TO GM NEEDS.
 
 if st.button('Act as Alex Montgomery, a System Administrator',
              type = 'primary', 

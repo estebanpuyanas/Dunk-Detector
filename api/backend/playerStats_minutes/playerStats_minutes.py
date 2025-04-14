@@ -1,4 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
+import pymysql.cursors
+import datetime
+
 from backend.db_connection import db
 
 playerStatsByMinutes = Blueprint('playersStats_minutes', __name__)
@@ -10,7 +13,7 @@ def get_playersStats_minutes():
         min_minutes = request.args.get('min_minutes', default=0, type=int)
     
         # Use dictionary cursor for JSON serialization ease
-        cursor = db.get_db().cursor(dictionary=True)
+        cursor = db.get_db().cursor(pymysql.cursors.DictCursor)
     
         query = '''
             SELECT
@@ -26,6 +29,12 @@ def get_playersStats_minutes():
     
         cursor.execute(query, (min_minutes,))
         theData = cursor.fetchall()
+
+        for row in theData:
+            for key, value in row.items():
+                if isinstance(value, datetime.timedelta):
+                    row[key] = str(value) 
+
     
         return jsonify(theData), 200
 

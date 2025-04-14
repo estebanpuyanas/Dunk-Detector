@@ -21,7 +21,7 @@ st.write("Click the button below to fetch player statistics for players who have
 if st.button('Fetch Player Stats Minutes', type='primary', use_container_width=True):
     try:
         # Construct API URL with the query parameter for min_minutes
-        api_url = f"http://api:4000/plstmin/playerStats_minutes?min_minutes={min_minutes}"
+        api_url = f"http://host.docker.internal:4000/plstmin/playerStats_minutes?min_minutes={min_minutes}"
         response = requests.get(api_url)
         response.raise_for_status()  # Check for HTTP errors
         

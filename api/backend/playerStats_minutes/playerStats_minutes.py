@@ -23,11 +23,11 @@ def get_playersStats_minutes():
             FROM players P
             JOIN statistics S ON P.id = S.playerId
             JOIN matches m ON S.matchId = m.id
-            WHERE S.totalPlayTime >= %s
+            WHERE S.totalPlayTime >= SEC_TO_TIME(%s)
             ORDER BY m.date DESC;
         '''
     
-        cursor.execute(query, (min_minutes,))
+        cursor.execute(query, (min_minutes * 60,))
         theData = cursor.fetchall()
 
         for row in theData:

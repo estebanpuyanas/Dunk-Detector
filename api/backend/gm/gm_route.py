@@ -15,13 +15,14 @@ def get_all_gm():
     ''') 
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
     return the_response
 
 #------------------------------------------------------------
 # Get detail for a gm identified by gm_id:
 
 @gm.route('/gm/<int:gm_id>', methods=['GET'])
-def get_gm(gm_id):
+def get_gm_id(gm_id):
     current_app.logger.info(f'GET /gm/{gm_id} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
@@ -39,7 +40,7 @@ def get_gm(gm_id):
 # Get detail for a gm identified by team_id:
 
 @gm.route('/gm/<int:gm_id>', methods=['GET'])
-def get_gm(name):
+def get_gm_team(name):
     current_app.logger.info(f'GET /gm/team/{name} route')
     cursor = db.get_db().cursor()
     cursor.execute('''

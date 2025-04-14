@@ -1,6 +1,6 @@
 import streamlit as st
-import mysql.connector
 from modules.nav import SideBarLinks
+import mysql.connector
 
 # Set page layout
 st.set_page_config(layout="wide")
@@ -8,18 +8,12 @@ SideBarLinks()
 
 st.title("Add New General Manager")
 
-# Session role check (optional safety check)
-if st.session_state["role"] != "system_admin":
-    st.error("Access Denied: You do not have permission to view this page.")
-    st.stop()
-
-# DB connection setup
 def get_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="your_username",
-        password="your_password",
-        database="dunk_detector"
+        host="mysql_db",         # or "db", either works inside Docker network
+        user="root",
+        password="rootpass",
+        database="dunkdector"
     )
 
 # Form
@@ -53,5 +47,8 @@ with st.form("gm_form"):
             except mysql.connector.Error as err:
                 st.error(f"Database error: {err}")
             finally:
-                cursor.close()
-                conn.close()
+                if 'cursor' in locals():
+                    cursor.close()
+                if 'conn' in locals():
+                    conn.close()
+

@@ -9,9 +9,14 @@ st.set_page_config(layout = 'wide')
 
 SideBarLinks()
 
-st.title('System Admin Home Page')
+st.title('General Manager Home Page')
 
-if st.button('Update ML Models', 
+if st.button('General Manager Search', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/21_ML_Model_Mgmt.py')
+  st.switch_page('pages/21_gm_search.py')
+
+if st.button('Roster Look Up',
+             type='primary',
+             use_container_width=True):
+  st.switch_page('pages/22_player_roster.py')

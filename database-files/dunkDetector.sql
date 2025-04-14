@@ -177,6 +177,7 @@ CREATE TABLE gameplans
     coachId  integer NOT NULL,
     planDate date NOT NULL,
     content varchar(50) NOT NULL,
+    image blob, 
 
     FOREIGN KEY (matchId) REFERENCES matches (id)
         ON UPDATE RESTRICT

@@ -6,6 +6,8 @@ from backend.products.products_routes import products
 from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.simple.simple_routes import simple_routes
+from backend.gm.gm_route import gm
+from backend.matches.matches_route import matches
 import os
 from dotenv import load_dotenv
 
@@ -45,8 +47,11 @@ def create_app():
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(players,     url_prefix='/pl')
-    app.register_blueprint(users, url_prefix='/u')
+    app.register_blueprint(users,       url_prefix='/u')
+    app.register_blueprint(gm,          url_prefix='/g')
+    app.register_blueprint(matches,     url_prefix='/m')
 
+    
     # Don't forget to return the app object
     return app
 

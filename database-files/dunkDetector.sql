@@ -520,3 +520,4 @@ VALUES (1, '2023-05-05', 'Great performance in scoring.', 1, 1, 8, 'scout'),
        (18, '2023-05-22', 'Excellent ball distribution.', 14, 17, 9, 'scout'),
        (19, '2023-05-23', 'Lacked defensive focus.', 15, 18, 6, 'scout'),
        (20, '2023-05-24', 'Overall, a balanced game.', NULL, 19, NULL, 'general');
+       

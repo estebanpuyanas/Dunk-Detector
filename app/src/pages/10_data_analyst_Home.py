@@ -9,7 +9,9 @@ st.set_page_config(layout = 'wide')
 # Show appropriate sidebar links for the role of the currently logged in user
 SideBarLinks()
 
-st.title(f"Welcome Data Analyst, {st.session_state['Phillip']}.")
+st.session_state["Data Analyst"] = "Phillip"
+
+st.title(f"Welcome Data Analyst, {st.session_state['Data Analyst']}.")
 st.write('')
 st.write('')
 st.write('### What would you like to do today?')

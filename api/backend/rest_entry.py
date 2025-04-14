@@ -1,9 +1,11 @@
 from flask import Flask
 
 from backend.db_connection import db
+from backend.gameplans.gameplans_routes import gameplans
 from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.simple.simple_routes import simple_routes
+from backend.playerStats_minutes.playerStats_minutes import playerStatsByMinutes
 import os
 from dotenv import load_dotenv
 

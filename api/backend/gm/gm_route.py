@@ -10,8 +10,7 @@ gm = Blueprint('gm', __name__)
 def get_all_gm():
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT id, firstName, middleName, lastName, mobile,
-                email, teamId 
+        SELECT id, firstName, middleName, lastName, teamId 
         FROM gm 
     ''') 
     theData = cursor.fetchall()
@@ -28,7 +27,7 @@ def get_gm(gm_id):
     cursor.execute('''
         SELECT id, firstName, middleName, lastName, mobile,
                 email, teamId
-        FROM gm WHERE id = %s
+        FROM general_managers WHERE id = %s
     ''', (gm_id,))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
@@ -40,14 +39,16 @@ def get_gm(gm_id):
 # Get detail for a gm identified by team_id:
 
 @gm.route('/gm/<int:gm_id>', methods=['GET'])
-def get_gm(team_id):
-    current_app.logger.info(f'GET /gm/{team_id} route')
+def get_gm(name):
+    current_app.logger.info(f'GET /gm/team/{name} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT id, firstName, middleName, lastName, mobile,
-                email, teamId
-        FROM gm WHERE id = %s
-    ''', (team_id,))
+        SELECT id, firstName, middleName, lastName, mobile, email, teamId
+        FROM general_managers g
+        JOIN (SELECT name, generalManagerID
+        FROM teams) t on g.id = t.generalManagerID
+        WHERE name = %s
+    ''', (name,))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200

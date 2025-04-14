@@ -1,8 +1,6 @@
 from flask import Flask
 
 from backend.db_connection import db
-from backend.customers.customer_routes import customers
-from backend.products.products_routes import products
 from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.simple.simple_routes import simple_routes

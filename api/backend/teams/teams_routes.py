@@ -6,23 +6,21 @@ teams = Blueprint('teams', __name__)
 #------------------------------------------------------------
 # Get roster for a team identified by team name:
 
-@teams.route('/teams/<int:name>', methods=['GET'])
+@teams.route('/teams/<string:name>', methods=['GET'])
 def get_roster(name):
+    current_app.logger.info(f'GET /teams/{name} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT id, firstName, middleName, lastName, agentId, 
-                   Height, Weight, position, DOB, teamId, injuryId
+        SELECT p.id, p.firstName, p.middleName, p.lastName, p.agentId, 
+               p.Height, p.Weight, p.position, p.DOB, p.teamId, p.injuryId
         FROM players p
-        JOIN (SELECT name, id
-        FROM teams) t on t.id = p.teamId
-        WHERE name = %s
+        JOIN teams t on t.id = p.teamId
+        WHERE t.name = %s
     ''', (name,))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200
     return the_response
-
-
 #------------------------------------------------------------
 # Get list for a teams and their ids:
 
@@ -31,14 +29,12 @@ def get_teams():
 
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT name, isCollege, isProfessional
+        SELECT id, name, isCollege, isProfessional
         FROM teams
     ''')
 
     theData = cursor.fetchall()
-    try:
-        return jsonify(formatted_data), 200
-    except Exception as e:
-        # Add error logging
-        current_app.logger.error(f"Error getting teams: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response

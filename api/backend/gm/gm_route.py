@@ -10,8 +10,9 @@ gm = Blueprint('gm', __name__)
 def get_all_gm():
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT id, firstName, middleName, lastName, teamId 
-        FROM gm 
+        SELECT g.id, g.firstName, g.middleName, g.lastName, g.teamId, t.name
+        FROM general_managers g
+        JOIN teams t on g.teamId = t.id 
     ''') 
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
@@ -21,15 +22,19 @@ def get_all_gm():
 #------------------------------------------------------------
 # Get detail for a gm identified by gm_id:
 
-@gm.route('/gm/<int:gm_id>', methods=['GET'])
-def get_gm_id(gm_id):
-    current_app.logger.info(f'GET /gm/{gm_id} route')
+@gm.route('/gm/<string:name>', methods=['GET'])
+def get_gm_name(name):
+    name = name.split()
+    first_name = name[0]
+    last_name = name[-1]
+    current_app.logger.info(f'GET /gm/{name} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
         SELECT id, firstName, middleName, lastName, mobile,
                 email, teamId
-        FROM general_managers WHERE id = %s
-    ''', (gm_id,))
+        FROM general_managers
+        WHERE firstName = %s AND lastName = %s
+    ''', (first_name, last_name))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200
@@ -39,16 +44,15 @@ def get_gm_id(gm_id):
 #------------------------------------------------------------
 # Get detail for a gm identified by team_id:
 
-@gm.route('/gm/<int:gm_id>', methods=['GET'])
+@gm.route('/gm/teams/<string:name>', methods=['GET'])
 def get_gm_team(name):
-    current_app.logger.info(f'GET /gm/team/{name} route')
+    current_app.logger.info(f'GET /gm/teams/{name} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
         SELECT id, firstName, middleName, lastName, mobile, email, teamId
         FROM general_managers g
-        JOIN (SELECT name, generalManagerID
-        FROM teams) t on g.id = t.generalManagerID
-        WHERE name = %s
+        JOIN teams t ON g.id = t.generalManagerID
+        WHERE t.name = %s
     ''', (name,))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
@@ -58,11 +62,11 @@ def get_gm_team(name):
 #------------------------------------------------------------
 #Put a new gm into the system:
 
-@gm.route('/gm', methods=['POST'])
+@gm.route('/gm/insert', methods=['POST'])
 def create_gm():
     gm_data = request.json
     query = """
-        INSERT INTO gm (firstName, middleName, lastName, mobile, email, teamId)
+        INSERT INTO general_managers (firstName, middleName, lastName, mobile, email, teamId)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
     data = (
@@ -95,7 +99,7 @@ def patch_gm(gm_id):
     if not fields:
         return make_response(jsonify({"error": "No valid fields provided"}), 400)
     values.append(gm_id)
-    query = "UPDATE gm SET " + ", ".join(fields) + " WHERE id = %s"
+    query = "UPDATE general_managers SET " + ", ".join(fields) + " WHERE id = %s"
     cursor = db.get_db().cursor()
     cursor.execute(query, tuple(values))
     db.get_db().commit()

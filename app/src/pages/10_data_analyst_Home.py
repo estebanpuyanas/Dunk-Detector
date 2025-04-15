@@ -21,10 +21,10 @@ if st.button('Player Data Report',
              use_container_width=True):
   st.switch_page('pages/11_Player_Data_Report.py')
 
-if st.button('Team Data', 
+if st.button('Make Notes', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/12_Team_Data.py')
+  st.switch_page('pages/12_Add_notes.py')
 
 if st.button("Compare Players",
              type='primary',

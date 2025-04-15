@@ -1,10 +1,16 @@
 import streamlit as st
-from modules.nav import SideBarLinks
+from modules.nav import SideBarLinks, AdminPageNav, AddPlayers, AddMatch, DelPlayer, UpdateScore, UpdateUser
 import requests
 
 # Set page layout
 st.set_page_config(layout="wide")
 SideBarLinks()
+AdminPageNav()
+AddPlayers()
+AddMatch()
+DelPlayer()
+UpdateScore()
+UpdateUser()
 
 st.title("Delete Player")
 

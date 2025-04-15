@@ -1,11 +1,17 @@
 import streamlit as st
-from modules.nav import SideBarLinks
+from modules.nav import SideBarLinks, AdminPageNav, AddPlayers, AddMatch, DelPlayer, UpdateScore, UpdateUser
 import requests
 import datetime
 
 # Set page layout
 st.set_page_config(layout="wide")
 SideBarLinks()
+AdminPageNav()
+AddPlayers()
+AddMatch()
+DelPlayer()
+UpdateScore()
+UpdateUser()
 
 st.title("Add New Player")
 min_date = datetime.date(1900, 1, 1)

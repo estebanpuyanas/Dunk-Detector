@@ -18,14 +18,14 @@ min_minutes = st.number_input("Minimum Play Time (in minutes)", value=0, step=1)
 
 st.write("Click the button below to fetch player statistics for players who have played at least the specified number of minutes.")
 
-# Initialize a session state variable to store fetched data if not already set
+# Initialize a session state variable to store fetched data
 if "fetched_data" not in st.session_state:
     st.session_state.fetched_data = None
 
 # Button to fetch data from the API endpoint
 if st.button('Fetch Player Stats Minutes', type='primary', use_container_width=True):
     try:
-        api_url = f"http://api:4000/plstmin/playerStats_minutes?min_minutes={min_minutes}"
+        api_url = f"http://api:4000/pl/playerStats_minutes?min_minutes={min_minutes}"
         response = requests.get(api_url)
         response.raise_for_status()  # Raise an exception for HTTP errors
         
@@ -54,8 +54,9 @@ if st.session_state.fetched_data is not None:
     
     # Allow multiple players to be selected via a multiselect widget.
     unique_players = sorted(df['player'].unique().tolist()) if 'player' in df.columns else []
-    # Set a default selection of the first two players (or adjust as needed)
-    selected_players = st.multiselect("Select players", unique_players, default=unique_players[:2])
+
+
+    selected_players = st.multiselect("Select players", unique_players, default=[])
     
     # Define the selectable statistic columns for plotting.
     stat_options = ["totalPoints", "assists", "rebounds", "steals", "blocks",

@@ -6,7 +6,7 @@ import requests
 st.set_page_config(layout="wide")
 SideBarLinks()
 
-st.title("Update General Manager Info")
+st.title("Update User Info")
 
 with st.form("update_gm_form"):
     st.subheader("Enter New Info for a User")
@@ -35,10 +35,9 @@ with st.form("update_gm_form"):
             }
 
             try:
-                response = requests.put(
-                    f"http://host.docker.internal:4000/users_routes.py/{int(user_id)}",
-                    json=updated_user
-                )
+                api_link = f'http://api:4000/u/users/{int(user_id)}'
+                response = requests.put(api_link, json=updated_user)
+                response.raise_for_status()  # Ensure the status code is checked for errors
 
                 if response.status_code == 200:
                     st.success(f"User with ID {user_id} updated successfully!")
@@ -46,5 +45,7 @@ with st.form("update_gm_form"):
                     st.error(f"No user found with ID {user_id}.")
                 else:
                     st.error(f"Failed to update user. Status: {response.status_code}, Error: {response.text}")
-            except Exception as e:
+                    st.error(response.text)
+
+            except requests.exceptions.RequestException as e:
                 st.error(f"Error connecting to user API: {e}")

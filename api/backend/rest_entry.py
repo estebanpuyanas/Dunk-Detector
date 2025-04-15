@@ -5,6 +5,7 @@ from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.simple.simple_routes import simple_routes
 from backend.gameplans.gameplans_routes import gameplans
+from backend.matches.matches_routes import matches
 import os
 from dotenv import load_dotenv
 
@@ -44,6 +45,7 @@ def create_app():
     app.register_blueprint(players,     url_prefix='/pl')
     app.register_blueprint(users,      url_prefix='/u')
     app.register_blueprint(gameplans, url_prefix='/gp')
+    app.register_blueprint(matches, url_prefix = '/m')
 
     # Don't forget to return the app object
     return app

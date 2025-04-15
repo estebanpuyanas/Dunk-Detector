@@ -41,13 +41,18 @@ with st.form("match_form"):
                 "finalScore": final_score
             }
             try: 
-                response = requests.post('http://host.docker.internal:4000/matches_routes.py', json = match_payload)
+                api_link = 'http://api:4000/m/matches'
+                response = requests.post(api_link, json=match_payload)
+                response.raise_for_status()  
+
                 if response.status_code == 201:
-                    match_id = response.json().get("id")
+                    results = response.json()
+                    match_id = results.get("id", "Unknown")
                     st.success(f"Match result added successfully! Match ID: {match_id}")
                 else:
                     st.error(f"Failed to add match. Status code: {response.status_code}")
                     st.error(response.text)
-            except Exception as e: 
+            except requests.exceptions.RequestException as e:
                 st.error(f"Error: {e}")
+
                 

@@ -49,11 +49,11 @@ def get_gm_team(name):
     current_app.logger.info(f'GET /gm/teams/{name} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT id, firstName, middleName, lastName, mobile, email, teamId
+        SELECT g.id, g.firstName, g.middleName, g.lastName, g.mobile, g.email, g.teamId
         FROM general_managers g
         JOIN teams t ON g.id = t.generalManagerID
         WHERE t.name = %s
-    ''', (name,))
+    ''', (name))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200

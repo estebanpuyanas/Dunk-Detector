@@ -90,7 +90,7 @@ def SideBarLinks(show_home=False):
             ViewAllGameplans()
 
         # If the user role is usaid worker, show the Api Testing page
-        if st.session_state["role"] == "Data Analyst":
+        if st.session_state["role"] == "usaid_worker":
             PredictionNav()
             ApiTestNav()
             ClassificationNav()

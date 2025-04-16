@@ -5,7 +5,7 @@ from backend.gameplans.gameplans_routes import gameplans
 from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.reports.reports import reports
-from backend.simple.simple_routes import simple_routes
+from backend.matches.matches_route import matches
 import os
 from dotenv import load_dotenv
 
@@ -41,11 +41,11 @@ def create_app():
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
     app.logger.info('current_app(): registering blueprints with Flask app object.')   
-    app.register_blueprint(simple_routes)
     app.register_blueprint(players,     url_prefix='/pl')
     app.register_blueprint(users, url_prefix='/u')
     app.register_blueprint(gameplans, url_prefix='/gp')
     app.register_blueprint(reports, url_prefix='/rp')
+    app.register_blueprint(matches, url_prefix = '/ma')
 
     # Don't forget to return the app object
     return app

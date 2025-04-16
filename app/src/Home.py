@@ -57,7 +57,7 @@ if st.button("Act as Mike Thompson, a Basketball Coach",
     logger.info("Logging in as Coach Mike Thompson")
     st.switch_page('pages/00_Coach_Home_Nav.py') #TODO UPDATE THIS PAGE TO COACH NEEDS. 
 
-if st.button('Act as Phillip, a data anlyst for the New York Knicks', 
+if st.button('Act as Phillip, a Data Analyst for the New York Knicks', 
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True

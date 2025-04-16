@@ -29,4 +29,9 @@ if st.button('Make Notes',
 if st.button("Compare Players",
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/13_Compare_players.py')
+  st.switch_page('pages/13_FindMostSimilarPlayer.py')
+
+if st.button("Team Match History Viewer",
+             type='primary',
+             use_container_width=True):
+  st.switch_page('pages/14_TeamMatchHistory.py')

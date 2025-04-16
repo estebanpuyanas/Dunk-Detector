@@ -24,7 +24,7 @@ except Exception as e:
 
 if notes:
     for n in notes:
-        st.write(f"**{n['reportDate']}** — Author **{n['authorId']}**")
+        st.write(f"**{n['reportDate']}** — Author **{n['firstName']}** **{n['lastName']}**")
         st.write(n["content"])
         st.markdown("---")
 else:

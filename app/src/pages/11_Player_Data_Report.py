@@ -53,10 +53,10 @@ if st.session_state.fetched_data is not None:
     st.dataframe(df)
     
     # Allow multiple players to be selected via a multiselect widget.
-    unique_players = sorted(df['player'].unique().tolist()) if 'player' in df.columns else []
+    players = df['player'].tolist() if 'player' in df.columns else []
 
 
-    selected_players = st.multiselect("Select players", unique_players, default=[])
+    selected_players = st.multiselect("Select players", players, default=[])
     
     # Define the selectable statistic columns for plotting.
     stat_options = ["totalPoints", "assists", "rebounds", "steals", "blocks",

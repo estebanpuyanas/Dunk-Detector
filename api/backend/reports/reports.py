@@ -9,7 +9,7 @@ def get_reports():
     try:
         # Use a DictCursor so fetchall() returns a list of dicts
         cursor = db.get_db().cursor(pymysql.cursors.DictCursor)
-        cursor.execute('SELECT * FROM reports')
+        cursor.execute('SELECT r.*, u.firstName, u.lastName FROM reports r JOIN users u ON u.id = r.authorId')
         data = cursor.fetchall()
         return jsonify(data), 200
 

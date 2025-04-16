@@ -65,9 +65,10 @@ if st.session_state.fetched_data is not None:
     selected_stat = st.selectbox("Select a statistic", available_stats)
     
     # Filter the DataFrame to only include rows for the selected players.
-    player_data = df[df["player"].isin(selected_players)].copy()
-    if not player_data.empty and 'match_date' in player_data.columns:
-        player_data = player_data.sort_values("match_date")
+    if 'player' in df.columns and selected_players:
+        player_data = df[df["player"].isin(selected_players)].copy()
+        if not player_data.empty and 'match_date' in player_data.columns:
+            player_data = player_data.sort_values("match_date")
         
         st.write(f"### {', '.join(selected_players)}: {selected_stat} Over Time")
         

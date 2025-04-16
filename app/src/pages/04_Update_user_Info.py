@@ -36,7 +36,7 @@ try:
             last_name = st.text_input("Last Name", value=user_data.get('lastName'))
             mobile = st.text_input("Phone Number", value=user_data.get('mobile', ''))
             email = st.text_input("Email", value=user_data.get('email'))
-            role = st.selectbox("Role", ["general manager", "coach", "player", 'data analyst', "admin"], index=["general manager", "coach", "player", 'data analyst', "admin"].index(user_data.get('role')))
+            role = st.selectbox("Role", ["general manager", "coach", "player", 'data analyst', "system administrator"], index=["general manager", "coach", "player", 'data analyst', "system administrator"].index(user_data.get('role')))
 
             submit = st.form_submit_button("Update User")
 

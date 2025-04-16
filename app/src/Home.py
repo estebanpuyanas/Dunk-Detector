@@ -66,7 +66,7 @@ if st.button('Act as Phillip, a Data Analyst for the New York Knicks',
     st.session_state['role'] = 'data_analyst'
     st.session_state['first_name'] = 'Phillip'
     logger.info("Logging in as Knicks Data Analyst Phillip")
-    st.switch_page('pages/10_data_analyst_home.py') #TODO UPDATE THIS PAGE TO DATA ANALYST NEEDS.
+    st.switch_page('pages/10_data_analyst_Home.py') #TODO UPDATE THIS PAGE TO DATA ANALYST NEEDS.
 
 if st.button('Act as Patrick Carter, an NBA General Manager', 
             type = 'primary', 

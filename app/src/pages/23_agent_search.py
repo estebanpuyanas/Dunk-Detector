@@ -34,7 +34,7 @@ with col2:
   st.subheader("Search for a Coach's Agent")
 
   try:
-    all_coaches = requests.get('http://api:4000/c/coaches').json()
+    all_coaches = requests.get('http://api:4000/g/gm/coaches').json()
     all_coaches = [coach['firstName'] + " " + coach['lastName'] for coach in all_coaches]  
   except:
     st.write('Could not connect to the database to get Player list')
@@ -49,12 +49,12 @@ with col2:
 
 if selected_player:
   st.write(f'{selected_player}\'s Agent: ')
-  results = requests.get(f'http://api:4000/a/agents/player/{selected_player}').json()
+  results = requests.get(f'http://api:4000/g/gm/agents/player/{selected_player}').json()
   st.dataframe(results)
 
 if selected_coach:
   st.write(f'{selected_coach}\'s Agent: ')
-  results = requests.get(f'http://api:4000/a/agents/coach/{selected_coach}').json()
+  results = requests.get(f'http://api:4000/g/gm/agents/coach/{selected_coach}').json()
   st.dataframe(results)
 
 

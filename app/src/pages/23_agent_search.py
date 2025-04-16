@@ -10,7 +10,7 @@ st.set_page_config(layout = 'wide')
 # Show appropriate sidebar links for the role of the currently logged in user
 SideBarLinks()
 
-st.title(f"Agents:, {st.session_state['first_name']}")
+st.title(f"Agents: {st.session_state['first_name']}")
 
 col1, col2 = st.columns(2)
 

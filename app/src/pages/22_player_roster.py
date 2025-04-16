@@ -10,7 +10,7 @@ st.set_page_config(layout = 'wide')
 # Show appropriate sidebar links for the role of the currently logged in user
 SideBarLinks()
 
-st.title(f"Rosters:, {st.session_state['first_name']}.")
+st.title(f"Rosters: {st.session_state['first_name']}.")
 
 try:
     all_teams = requests.get('http://api:4000/t/teams').json()

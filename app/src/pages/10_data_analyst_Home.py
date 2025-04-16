@@ -11,7 +11,7 @@ SideBarLinks()
 
 st.session_state["Data Analyst"] = "Phillip"
 
-st.title(f"Welcome Data Analyst, {st.session_state['Data Analyst']}.")
+st.title(f"Welcome, Data Analyst {st.session_state['Data Analyst']}.")
 st.write('')
 st.write('')
 st.write('### What would you like to do today?')

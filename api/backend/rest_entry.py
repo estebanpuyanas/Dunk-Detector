@@ -42,7 +42,7 @@ def create_app():
     # and give a url prefix to each
     app.logger.info('current_app(): registering blueprints with Flask app object.')   
     app.register_blueprint(players,     url_prefix='/pl')
-    app.register_blueprint(users, url_prefix='/u')
+    app.register_blueprint(users,      url_prefix='/u')
     app.register_blueprint(gameplans, url_prefix='/gp')
     app.register_blueprint(reports, url_prefix='/rp')
     app.register_blueprint(matches, url_prefix = '/ma')

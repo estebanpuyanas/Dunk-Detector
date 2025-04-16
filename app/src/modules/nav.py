@@ -55,9 +55,31 @@ def ClassificationNav():
 
 #### ------------------------ System Admin Role ------------------------
 def AdminPageNav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
+    st.sidebar.page_link("pages/30_system_admin_home.py", label="System Admin", icon="🖥️")
+
+def AddPlayers():
     st.sidebar.page_link(
-        "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
+        "pages/04_Add_Player.py", label="Add Player", icon="➕"
+    )
+
+def AddMatch():
+    st.sidebar.page_link(
+        "pages/04_Add_Match.py", label="Add Match", icon="📅"
+    )
+
+def DelPlayer():
+    st.sidebar.page_link(
+        "pages/04_Delete_Player.py", label="Delete Player", icon="🗑️"
+    )
+
+def UpdateScore():
+    st.sidebar.page_link(
+        "pages/04_Update_Match_Score.py", label="Update Match Score", icon="🔢"
+    )
+
+def UpdateUser():
+    st.sidebar.page_link(
+        "pages/04_Update_user_Info.py", label="Update User Info", icon="👤"
     )
 
 

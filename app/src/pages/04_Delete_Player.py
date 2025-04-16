@@ -29,7 +29,7 @@ with st.form("delete_player_form"):
             response.raise_for_status()  # Ensure the status code is checked for errors
 
             if response.status_code == 200:
-                st.success(f"User with ID '{player_id}' deleted successfully!")
+                st.success(f"Player with ID '{player_id}' deleted successfully!")
             elif response.status_code == 404:
                 st.error(f"No user found with ID '{player_id}'.")
             else:

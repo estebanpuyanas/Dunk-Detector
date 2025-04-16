@@ -32,7 +32,7 @@ with st.form("add_player_form"):
     dob = st.date_input("Date of Birth", min_value=min_date, max_value=max_date)
     injury_id = st.number_input("Injury ID (optional)", min_value=0, step=1)
 
-    submit = st.form_submit_button("Add GM")
+    submit = st.form_submit_button("Add Player")
 
     if submit:
         if not (first_name and last_name and agent_id and position and team_id and height and weight and dob):

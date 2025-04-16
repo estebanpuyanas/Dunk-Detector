@@ -40,7 +40,7 @@ with st.form("score_update_form"):
                 st.warning("Please provide at least one score field to update.")
             else:
                 try:
-                    api_link = f'http://api:4000/m/matches/{int(match_id)}'
+                    api_link = f'http://api:4000/ma/matches/{int(match_id)}'
                     response = requests.patch(api_link, json=update_data)
                     response.raise_for_status()  # Ensure the status code is checked for errors
 

@@ -47,7 +47,7 @@ with st.form("match_form"):
                 "finalScore": final_score
             }
             try: 
-                api_link = 'http://api:4000/m/matches'
+                api_link = 'http://api:4000/ma/matches'
                 response = requests.post(api_link, json=match_payload)
                 response.raise_for_status()  
 

@@ -35,10 +35,32 @@ def ViewAllGameplans():
         "pages/01_Gameplans_Home_Nav.py", label="View All Gameplans", icon="🏀"
     )
 
+## ------------------------ Examples for Role of Data Analyst ------------------------
+def playerReports():
+    st.sidebar.page_link(
+        "pages/11_Player_Data_Report.py", label="Player Data Reports", icon="🛜")
+
+
+def makeNotes():
+    st.sidebar.page_link(
+        "pages/12_Add_notes.py", label="Make Notes", icon="📈"
+    )
+
+
+def comparePlayers():
+    st.sidebar.page_link(
+        "pages/13_FindMostSimilarPlayer.py", label="Compare Players", icon="🌺"
+    )
+
+def matchHistory():
+    st.sidebar.page_link(
+        "pages/14_TeamMatchHistory.py", label="Team Match History Viewer", icon="🌺"
+    )
 
 ## ------------------------ Examples for Role of General Manager ------------------------
 def GmSearch():
-    st.sidebar.page_link("pages/21_gm_search.py", label="General Manager Search", icon="🛜")
+    st.sidebar.page_link(
+        "pages/21_gm_search.py", label="General Manager Search", icon="🛜")
 
 
 def rosterSearch():
@@ -116,6 +138,14 @@ def SideBarLinks(show_home=False):
             GmSearch()
             rosterSearch()
             agentSearch()
+            comparePlayers()
+
+        if st.session_state["role"] == "data_analyst":
+            playerReports()
+            makeNotes()
+            comparePlayers()
+            matchHistory()
+            
 
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":

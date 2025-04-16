@@ -34,7 +34,7 @@ with col2:
   st.subheader("Search for a Coach's Agent")
 
   try:
-    all_coaches = requests.get('http://api:4000/g/gm/coaches').json()
+    all_coaches = requests.get('http://api:4000/c/coaches').json()
     all_coaches = [coach['firstName'] + " " + coach['lastName'] for coach in all_coaches]  
   except:
     st.write('Could not connect to the database to get Player list')

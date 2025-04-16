@@ -25,3 +25,8 @@ if st.button('Agent Look Up',
              type='primary',
              use_container_width=True):
   st.switch_page('pages/23_agent_search.py')
+
+if st.button("Compare Players",
+             type='primary',
+             use_container_width=True):
+  st.switch_page('pages/13_FindMostSimilarPlayer.py')

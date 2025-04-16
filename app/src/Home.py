@@ -55,7 +55,9 @@ if st.button("Act as Mike Thompson, a Basketball Coach",
     # finally, we ask streamlit to switch to another page, in this case, the 
     # landing page for this particular user type
     logger.info("Logging in as Coach Mike Thompson")
-    st.switch_page('pages/00_Coach_Home_Nav.py') #TODO UPDATE THIS PAGE TO COACH NEEDS. 
+    
+    st.switch_page('pages/00_Coach_Home_Nav.py') 
+    #TODO UPDATE THIS PAGE TO COACH NEEDS. 
 
 if st.button('Act as Phillip, a Data Analyst for the New York Knicks', 
             type = 'primary', 

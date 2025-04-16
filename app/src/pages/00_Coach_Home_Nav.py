@@ -9,29 +9,23 @@ st.set_page_config(layout = 'wide')
 # Show appropriate sidebar links for the role of the currently logged in user
 SideBarLinks()
 
-st.session_state["Data Analyst"] = "Phillip"
-
-st.title(f"Welcome Data Analyst, {st.session_state['Data Analyst']}.")
+st.title(f"Welcome Coach, {st.session_state['first_name']}.")
 st.write('')
 st.write('')
 st.write('### What would you like to do today?')
 
-if st.button('Player Data Report', 
+if st.button('View Other Team Stats', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/11_Player_Data_Report.py')
+  st.switch_page('pages/01_OtherTeamStats.py')
 
-if st.button('Make Notes', 
+if st.button('View/Make Gameplans', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/12_Add_notes.py')
+  st.switch_page('pages/01_Gameplans_Home_Nav.py')
 
-if st.button("Compare Players",
+if st.button('View/Make Reports', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/13_FindMostSimilarPlayer.py')
+  st.switch_page('pages/01_Reports.py')
 
-if st.button("Team Match History Viewer",
-             type='primary',
-             use_container_width=True):
-  st.switch_page('pages/14_TeamMatchHistory.py')

@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 from backend.db_connection import db
+import pymysql.cursors
+import datetime
 
 players = Blueprint('players', __name__)
 
@@ -99,6 +101,23 @@ def get_player(player_id):
     the_response.status_code = 200
     return the_response
 #------------------------------------------------------------
+# Get detail for a single player identified by team_id:
+# TESTED - PASSING POSTMAN REQUEST
+
+@players.route('/team_players/<int:team_id>', methods=['GET'])
+def get_team_player(team_id):
+    current_app.logger.info(f'GET /players/{team_id} route')
+    cursor = db.get_db().cursor()
+    cursor.execute('''
+        SELECT id, firstName, middleName, lastName, 
+               agentId, position, teamId, height, weight, dob, injuryId
+        FROM players WHERE teamId = %s
+    ''', (team_id,))
+    theData = cursor.fetchall()
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response    
+#------------------------------------------------------------
 # Delete a player identified by player_id:
 # TESTED - PASSING POSTMAN REQUEST
 
@@ -135,6 +154,45 @@ def patch_player(player_id):
     response.status_code = 200
     return response
 #------------------------------------------------------------
+
+@players.route('/playerStats_minutes', methods=['GET'])
+def get_playersStats_minutes():
+    try:
+        # Retrieve the minimum play minutes from the query parameters (default to 0)
+        min_minutes = request.args.get('min_minutes', default=0, type=int)
+    
+        # Use dictionary cursor for JSON serialization ease
+        cursor = db.get_db().cursor(pymysql.cursors.DictCursor)
+    
+        query = '''
+            SELECT
+                P.firstname,
+                P.lastname,
+                S.*,
+                m.date AS match_date
+            FROM players P
+            JOIN statistics S ON P.id = S.playerId
+            JOIN matches m ON S.matchId = m.id
+            WHERE S.totalPlayTime >= SEC_TO_TIME(%s)
+            ORDER BY m.date DESC;
+        '''
+    
+        cursor.execute(query, (min_minutes * 60,))
+        theData = cursor.fetchall()
+
+        for row in theData:
+            for key, value in row.items():
+                if isinstance(value, datetime.timedelta):
+                    row[key] = str(value) 
+
+    
+        return jsonify(theData), 200
+
+    except Exception as e:
+        current_app.logger.exception("Error fetching player stats minutes")
+        # Return the error message in the JSON response for debugging purposes
+        return jsonify({"error": str(e)}), 500
+
 
 # FORMATS BEING USED FOR REQUESTS:
 '''

@@ -1,5 +1,8 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 from backend.db_connection import db
+from datetime import timedelta
+from pymysql.cursors import DictCursor  
+
 
 matches = Blueprint('matches', __name__)
 
@@ -8,13 +11,22 @@ matches = Blueprint('matches', __name__)
 
 @matches.route('/matches', methods=['GET']) 
 def get_all_matches():
-    cursor = db.get_db().cursor()
+    cursor = db.get_db().cursor(DictCursor)
     cursor.execute('''
-        SELECT id, homeTeamId, awayTeamId, date, time,
-                location, homeScore, awayScore, finalScore 
-        FROM matches 
+        SELECT m.id, homeTeamId, awayTeamId, date, m.time AS time,
+                location, homeScore, awayScore, finalScore, ht.name as 'homeTeamName', at.name as 'awayTeamName' 
+        FROM matches m
+        JOIN teams ht ON m.homeTeamId = ht.id
+        JOIN teams at ON m.awayTeamId = at.id
     ''') 
+
+    
     theData = cursor.fetchall()
+
+    for row in theData:
+        if isinstance(row['time'], timedelta):
+            row['time'] = str(row['time'])
+
     the_response = make_response(jsonify(theData))
     return the_response
 
@@ -26,9 +38,14 @@ def get_match(match_id):
     current_app.logger.info(f'GET /matches/{match_id} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT id, homeTeamId, awayTeamId, date, time,
-                location, homeScore, awayScore, finalScore
-        FROM matches WHERE id = %s
+        SELECT m.id, homeTeamId, awayTeamId,
+                location, homeScore, awayScore, finalScore, homeTeamName
+        FROM matches m 
+        JOIN (SELECT name as homeTeamName, id
+              FROM teams) t1 ON t1.id = m.homeTeamId
+        JOIN (SELECT name as awayTeamName, id
+              FROM teams) t2 ON t2.id = m.awayTeamId
+        WHERE m.id = %s
     ''', (match_id,))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
@@ -39,15 +56,14 @@ def get_match(match_id):
 #------------------------------------------------------------
 # Get detail for all matches of a team identified by team_id:
 
-@matches.route('/matches/<int:match_id>', methods=['GET'])
+@matches.route('/matches/team/<int:team_id>', methods=['GET'])
 def get_matches(team_id):
-    current_app.logger.info(f'GET /matches/{team_id} route')
+    current_app.logger.info(f'GET /matches/team/{team_id} route')
     cursor = db.get_db().cursor()
     cursor.execute('''
-        SELECT id, homeTeamId, awayTeamId, date, time,
-                location, homeScore, awayScore, finalScore
-        FROM matches WHERE homeTeamid = %s OR awayTeamId = %s 
-    ''', (team_id,))
+    SELECT id, homeTeamId, awayTeamId, location, homeScore, awayScore, finalScore
+    FROM matches WHERE homeTeamId = %s OR awayTeamId = %s 
+    ''', (team_id, team_id))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200

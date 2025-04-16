@@ -223,7 +223,7 @@ CREATE TABLE statistics
     INDEX (matchId)
 );
 
--- Reports table:
+-- reports table
 CREATE TABLE reports
 (
     id integer AUTO_INCREMENT PRIMARY KEY,
@@ -253,35 +253,6 @@ CREATE TABLE reports
     INDEX (matchId)
 );
 
--- Scout reports table:
-CREATE TABLE scout_reports
-(
-    id integer AUTO_INCREMENT PRIMARY KEY,
-    authorId integer NOT NULL,
-    playerId integer NOT NULL,
-    matchId integer NOT NULL,
-    reportDate date NOT NULL,
-    content varchar(50) NOT NULL,
-    playerRating integer NOT NULL,
-
-    FOREIGN KEY (authorId) REFERENCES users (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (playerId) REFERENCES players (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (matchId) REFERENCES matches (id)
-        ON UPDATE RESTRICT
-        ON DELETE CASCADE,
-
-    INDEX (id),
-    INDEX (authorId),
-    INDEX (playerId)
-);
-
--- Insertings values for each table
 INSERT INTO agents (firstName, middleName, lastName, mobile, email)
 VALUES ('Michael', 'A.', 'Johnson', '555000001', 'michael.johnson@example.com'),
        ('James', 'B.', 'Smith', '555000002', 'james.smith@example.com'),

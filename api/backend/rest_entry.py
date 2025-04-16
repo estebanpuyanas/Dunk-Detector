@@ -7,6 +7,8 @@ from backend.gm.gm_route import gm
 from backend.matches.matches_routes import matches
 from backend.teams.teams_routes import teams
 from backend.coaches.coaches_routes import coaches
+from backend.gameplans.gameplans_routes import gameplans
+from backend.reports.reports import reports
 import os
 from dotenv import load_dotenv
 
@@ -45,10 +47,11 @@ def create_app():
     app.register_blueprint(players,     url_prefix='/pl')
     app.register_blueprint(users,       url_prefix='/u')
     app.register_blueprint(gm,          url_prefix='/g')
-    app.register_blueprint(matches,     url_prefix='/m')
     app.register_blueprint(teams,       url_prefix='/t')
     app.register_blueprint(coaches,     url_prefix='/c')
-
+    app.register_blueprint(gameplans, url_prefix='/gp')
+    app.register_blueprint(reports, url_prefix='/rp')
+    app.register_blueprint(matches, url_prefix = '/ma')
     
     # Don't forget to return the app object
     return app

@@ -3,6 +3,13 @@ from modules.nav import SideBarLinks, AdminPageNav, AddPlayers, AddMatch, DelPla
 import requests
 
 st.set_page_config(layout="wide")
+SideBarLinks()
+AdminPageNav()
+AddPlayers()
+AddMatch()
+DelPlayer()
+UpdateScore()
+UpdateUser()
 
 try:
     api_link = 'http://api:4000/u/users'  

@@ -35,29 +35,73 @@ def ViewAllGameplans():
         "pages/01_Gameplans_Home_Nav.py", label="View All Gameplans", icon="🏀"
     )
 
-
-## ------------------------ Examples for Role of usaid_worker ------------------------
-def ApiTestNav():
-    st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon="🛜")
-
-
-def PredictionNav():
+## ------------------------ Examples for Role of Data Analyst ------------------------
+def playerReports():
     st.sidebar.page_link(
-        "pages/11_Prediction_Page.py", label="Regression Prediction", icon="📈"
+        "pages/11_Player_Data_Report.py", label="Player Data Reports", icon="🛜")
+
+
+def makeNotes():
+    st.sidebar.page_link(
+        "pages/12_Add_notes.py", label="Make Notes", icon="📈"
     )
 
 
-def ClassificationNav():
+def comparePlayers():
     st.sidebar.page_link(
-        "pages/13_Classification.py", label="Classification Demo", icon="🌺"
+        "pages/13_FindMostSimilarPlayer.py", label="Compare Players", icon="🌺"
+    )
+
+def matchHistory():
+    st.sidebar.page_link(
+        "pages/14_TeamMatchHistory.py", label="Team Match History Viewer", icon="🌺"
+    )
+
+## ------------------------ Examples for Role of General Manager ------------------------
+def GmSearch():
+    st.sidebar.page_link(
+        "pages/21_gm_search.py", label="General Manager Search", icon="🛜")
+
+
+def rosterSearch():
+    st.sidebar.page_link(
+        "pages/22_player_roster.py", label="Roster Look Up", icon="📈"
+    )
+
+
+def agentSearch():
+    st.sidebar.page_link(
+        "pages/23_agent_search.py", label="Agent Search", icon="🌺"
     )
 
 
 #### ------------------------ System Admin Role ------------------------
 def AdminPageNav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
+    st.sidebar.page_link("pages/30_system_admin_home.py", label="System Admin", icon="🖥️")
+
+def AddPlayers():
     st.sidebar.page_link(
-        "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
+        "pages/04_Add_Player.py", label="Add Player", icon="➕"
+    )
+
+def AddMatch():
+    st.sidebar.page_link(
+        "pages/04_Add_Match.py", label="Add Match", icon="📅"
+    )
+
+def DelPlayer():
+    st.sidebar.page_link(
+        "pages/04_Delete_Player.py", label="Delete Player", icon="🗑️"
+    )
+
+def UpdateScore():
+    st.sidebar.page_link(
+        "pages/04_Update_Match_Score.py", label="Update Match Score", icon="🔢"
+    )
+
+def UpdateUser():
+    st.sidebar.page_link(
+        "pages/04_Update_user_Info.py", label="Update User Info", icon="👤"
     )
 
 
@@ -90,10 +134,18 @@ def SideBarLinks(show_home=False):
             ViewAllGameplans()
 
         # If the user role is usaid worker, show the Api Testing page
-        if st.session_state["role"] == "usaid_worker":
-            PredictionNav()
-            ApiTestNav()
-            ClassificationNav()
+        if st.session_state["role"] == "general_manager":
+            GmSearch()
+            rosterSearch()
+            agentSearch()
+            comparePlayers()
+
+        if st.session_state["role"] == "data_analyst":
+            playerReports()
+            makeNotes()
+            comparePlayers()
+            matchHistory()
+            
 
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":

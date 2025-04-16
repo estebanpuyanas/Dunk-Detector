@@ -23,7 +23,7 @@ def get_all_users():
 # TESTED - PASSING POSTMAN REQUEST
 
 @users.route('/users', methods=['POST'])
-def create_user():
+def create_user(values):
     user_data = request.json
     query = """
         INSERT INTO users (firstName, middleName, lastName, mobile, email, role)

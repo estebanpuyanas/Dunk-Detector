@@ -42,7 +42,7 @@ def get_gm_name(name):
 
 
 #------------------------------------------------------------
-# Get detail for a gm identified by team_id:
+# Get detail for a gm identified by team name:
 
 @gm.route('/gm/teams/<string:name>', methods=['GET'])
 def get_gm_team(name):
@@ -59,50 +59,101 @@ def get_gm_team(name):
     the_response.status_code = 200
     return the_response
 
-#------------------------------------------------------------
-#Put a new gm into the system:
 
-@gm.route('/gm/insert', methods=['POST'])
-def create_gm():
-    gm_data = request.json
-    query = """
-        INSERT INTO general_managers (firstName, middleName, lastName, mobile, email, teamId)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """
-    data = (
-        gm_data.get('firstName'),
-        gm_data.get('middleName'),
-        gm_data.get('lastName'),
-        gm_data.get('mobile'),
-        gm_data.get('email'),
-        gm_data.get('teamId')
-    )
-    cursor = db.get_db().cursor()
-    cursor.execute(query, data)
-    db.get_db().commit()
-    new_id = cursor.lastrowid
-    response = make_response(jsonify({"id": new_id}), 201)
-    return response
 #------------------------------------------------------------
 # Do dynamic partial update of gm info for a gm given the id:
 
-@gm.route('/gm/<int:gm_id>', methods=['PATCH'])
-def patch_gm(gm_id):
-    gm_data = request.json
-    fields = []
-    values = []
-    allowed_fields = ['team', 'email', 'mobile']
-    for field in allowed_fields:
-        if field in gm_data:
-            fields.append(f"{field} = %s")
-            values.append(gm_data[field])
-    if not fields:
-        return make_response(jsonify({"error": "No valid fields provided"}), 400)
-    values.append(gm_id)
-    query = "UPDATE general_managers SET " + ", ".join(fields) + " WHERE id = %s"
+@gm.route('/gm/agents/player/<string:name>', methods=['GET'])
+def get_agent_player(name):
+    name = name.split()
+    first_name = name[0]
+    last_name = name[-1]
+    current_app.logger.info(f'GET/agents/player/{name} route')
     cursor = db.get_db().cursor()
-    cursor.execute(query, tuple(values))
-    db.get_db().commit()
-    response = make_response(jsonify({"message": "The following fields were updated for GM id" + str(gm_id) + ": " + ", ".join(fields)}))
-    response.status_code = 200
-    return response
+    cursor.execute('''
+        SELECT a.id, a.firstName, a.middleName, a.lastName, a.mobile, a.email
+        FROM agents a
+        JOIN players p ON a.id = p.agentId
+        WHERE p.firstName = %s AND p.lastName = %s
+    ''', (first_name, last_name))
+    theData = cursor.fetchall()
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+#------------------------------------------------------------
+# Do dynamic partial update of gm info for a gm given the id:
+
+@gm.route('/gm/agents/coach/<string:name>', methods=['GET'])
+def get_agent_coach(name):
+    name = name.split()
+    first_name = name[0]
+    last_name = name[-1]
+    current_app.logger.info(f'GET/agents/coach/{name} route')
+    cursor = db.get_db().cursor()
+    cursor.execute('''
+        SELECT a.id, a.firstName, a.middleName, a.lastName, a.mobile, a.email
+        FROM agents a
+        JOIN coaches c ON a.id = c.agentId
+         WHERE c.firstName = %s AND c.lastName = %s
+    ''', (first_name, last_name))
+    theData = cursor.fetchall()
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+#------------------------------------------------------------
+# Get all coaches from the system:
+
+@gm.route('/gm/players', methods=['GET'])
+def get_players():
+    cursor = db.get_db().cursor()
+    cursor.execute('''
+        SELECT id, firstName, middleName, lastName, mobile, email, teamId, agentId
+        FROM coaches
+    ''')
+    theData = cursor.fetchall()
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+
+#------------------------------------------------------------
+# Get roster for a team identified by team name:
+
+@gm.route('/gm/teams/<string:name>', methods=['GET'])
+def get_roster(name):
+    current_app.logger.info(f'GET /teams/{name} route')
+    cursor = db.get_db().cursor()
+    cursor.execute('''
+        SELECT p.id, p.firstName, p.middleName, p.lastName, p.agentId, 
+               p.Height, p.Weight, p.position, p.DOB, p.teamId, p.injuryId
+        FROM players p
+        JOIN teams t on t.id = p.teamId
+        WHERE t.name = %s
+    ''', (name,))
+    theData = cursor.fetchall()
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+#------------------------------------------------------------
+# Get list for a teams and their ids:
+
+@gm.route('/gm/teams', methods=['GET'])
+def get_teams():
+
+    cursor = db.get_db().cursor()
+    cursor.execute('''
+        SELECT id, name, isCollege, isProfessional
+        FROM teams
+    ''')
+
+    theData = cursor.fetchall()
+
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+
+

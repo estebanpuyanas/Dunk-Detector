@@ -4,8 +4,7 @@ from backend.db_connection import db
 coaches = Blueprint('coaches', __name__)
 
 #------------------------------------------------------------
-# Get all players from the system:
-# TESTED - PASSING POSTMAN REQUEST
+# Get all coaches from the system:
 
 @coaches.route('/coaches', methods=['GET'])
 def get_players():

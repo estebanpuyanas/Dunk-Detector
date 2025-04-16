@@ -27,8 +27,13 @@ def get_match(match_id):
     cursor = db.get_db().cursor()
     cursor.execute('''
         SELECT id, homeTeamId, awayTeamId, date, time,
-                location, homeScore, awayScore, finalScore
-        FROM matches WHERE id = %s
+                location, homeScore, awayScore, finalScore, homeTeamName
+        FROM matches m 
+        JOIN (SELEECT name as homeTeamName
+              FROM teams) t1 ON t1.id = m.homeTeamId
+        JOIN (SELECT name as awayTeamName
+              FROM team) t2 ON t2.id = m.awayTeamId
+        WHERE id = %s
     ''', (match_id,))
     theData = cursor.fetchall()
     the_response = make_response(jsonify(theData))

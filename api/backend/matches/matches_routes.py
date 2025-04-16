@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 from backend.db_connection import db
+from datetime import timedelta
 
 matches = Blueprint('matches', __name__)
 

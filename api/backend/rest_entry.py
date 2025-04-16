@@ -4,7 +4,7 @@ from backend.db_connection import db
 from backend.players.players_routes import players
 from backend.users.users_routes import users
 from backend.gm.gm_route import gm
-from backend.matches.matches_routes import matches
+from backend.matches.matches_route import matches
 from backend.teams.teams_routes import teams
 from backend.coaches.coaches_routes import coaches
 from backend.gameplans.gameplans_routes import gameplans

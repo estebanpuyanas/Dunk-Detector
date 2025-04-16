@@ -67,20 +67,20 @@ def update_gameplan(gameplan_id):
     response = make_response(jsonify({"message": "Gameplan updated successfully"}), 200)
     return response
 #------------------------------------------------------------
-# Get detail for a single gameplan identified by gameplan_id:
-# TESTED - PASSING POSTMAN REQUEST
 
-@gameplans.route('/gameplans/<int:gameplan_id>', methods=['GET'])
-def get_gameplan(gameplan_id):
-    current_app.logger.info(f'GET /gameplans/{gameplan_id} route')
-    cursor = db.get_db().cursor()
-    cursor.execute('''
-        SELECT id, matchId, coachId, planDate, content
-        FROM gameplans WHERE id = %s
-    ''', (gameplan_id,))
-    theData = cursor.fetchall()
-    the_response = make_response(jsonify(theData))
-    the_response.status_code = 200
+# Get detail for a single gameplan identified by gameplan_id: 
+# TESTED - PASSING POSTMAN REQUEST 
+@gameplans.route('/gameplans/<int:gameplan_id>', methods=['GET']) 
+def get_gameplan(gameplan_id): 
+    current_app.logger.info(f'GET /gameplans/{gameplan_id} route') 
+    cursor = db.get_db().cursor() 
+    cursor.execute(''' 
+        SELECT id, matchId, coachId, planDate, content 
+        FROM gameplans WHERE id = %s 
+    ''', (gameplan_id,)) 
+    theData = cursor.fetchall() 
+    the_response = make_response(jsonify(theData)) 
+    the_response.status_code = 200 
     return the_response
 #------------------------------------------------------------
 # Do dynamic partial update of user info for a user given the id:

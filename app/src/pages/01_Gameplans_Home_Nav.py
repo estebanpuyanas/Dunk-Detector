@@ -49,7 +49,7 @@ st.write("## Make a New Gameplan!")
 with st.form("Make a New Gameplan!"):
     # today_date = datetime.date.today()
     plan_date = st.date_input("Date created:", value=None) 
-    plan_content = st.text_input("Describe New Gameplan:")
+    plan_content = st.text_input("Content:")
     uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
 
     # Insert a file uploader that accepts multiple files at a time
@@ -69,7 +69,7 @@ with st.form("Make a New Gameplan!"):
       else:
         data['gameplan_date'] = plan_date.isoformat()
         data['gameplan_content'] = plan_content
-        # data['gameplan_files'] = uploaded_files.isoformat() error
+        # data['gameplan_files'] = uploaded_files.isoformat() -- error
         st.write(data) #helpful to see if data was proccessed 
         st.success("Gameplan successfully submitted", icon="✅")
 

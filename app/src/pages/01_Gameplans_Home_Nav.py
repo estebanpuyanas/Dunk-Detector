@@ -9,30 +9,9 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-
-# TEMPLATE
-# st.write("# More API Access Examples")
-# st.write("## Creating a New Product")
-
-
-# DELETE THIS BUTTON 
-#if st.button('View Selected Gameplan', 
-#             type='primary',
-#             use_container_width=True):
-#  st.switch_page('pages/01_Selected_Gameplan.py')
-
-# DELETE 01_New_Gameplan.py...
-#if st.button('Create New Gameplan', 
-#             type='primary',
-#             use_container_width=True):
-#  st.switch_page('pages/01_New_Gameplan.py')
-
-# TESTED 
 st.write("# View All Gameplans")
-# Simply retrieving data from a REST api running in a separate Docker Container.
-#If the container isn't running, this will be very unhappy.  But the Streamlit app 
-#should not totally die. 
 
+#gets data from the gameplans route 
 data = {} 
 try:
   data = requests.get('http://api:4000/gp/gameplans').json()
@@ -40,17 +19,18 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-#st.dataframe(data)
+#shows data from gameplans route as a table on the screen
 st.table(data)
 
 # TESTED - creating a form 
 st.write("## Make a New Gameplan!")
 
 with st.form("Make a New Gameplan!"):
-    # today_date = datetime.date.today()
-    plan_date = st.date_input("Date created:", value=None) 
-    plan_content = st.text_input("Content:")
-    uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
+    coach_id = st.text_input("Coach ID*") 
+    match_id = st.text_input("Match ID*") 
+    plan_date = st.date_input("Date created*") 
+    plan_content = st.text_input("Content*")
+    uploaded_files = st.file_uploader("Choose a file*", accept_multiple_files=True)
 
     # Insert a file uploader that accepts multiple files at a time
     for uploaded_file in uploaded_files: 
@@ -62,11 +42,13 @@ with st.form("Make a New Gameplan!"):
 
     if submitted:
       data = {}
-      if not plan_date or not plan_content or not uploaded_files:
-        st.warning("Please fill all required fields: date, content, and file(s)")
+      if not coach_id or not match_id or not plan_date or not plan_content or not uploaded_files:
+        st.warning("Please fill all required fields*")
         data['gameplan_date'] = plan_date
         # data['gameplan_files'] = uploaded_files
       else:
+        data['coach_id'] = coach_id
+        data['match_id'] = match_id
         data['gameplan_date'] = plan_date.isoformat()
         data['gameplan_content'] = plan_content
         # data['gameplan_files'] = uploaded_files.isoformat() -- error

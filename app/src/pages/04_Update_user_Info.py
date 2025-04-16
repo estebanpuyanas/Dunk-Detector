@@ -2,36 +2,26 @@ import streamlit as st
 from modules.nav import SideBarLinks, AdminPageNav, AddPlayers, AddMatch, DelPlayer, UpdateScore, UpdateUser
 import requests
 
-# Set page layout
 st.set_page_config(layout="wide")
-SideBarLinks()
-AdminPageNav()
-AddPlayers()
-AddMatch()
-DelPlayer()
-UpdateScore()
-UpdateUser()
 
-# Fetch all users
 try:
-    api_link = 'http://api:4000/u/users'  # API endpoint to get users
+    api_link = 'http://api:4000/u/users'  
     response = requests.get(api_link)
-    response.raise_for_status()  # Raise an exception for bad responses
-    users = response.json()  # Assuming this returns a list of users
+    response.raise_for_status() 
+    users = response.json() 
     
-    # Check if users exist
     if users:
         user_options = [f"{user['id']} - {user['firstName']} {user['lastName']}" for user in users]
         selected_user = st.selectbox("Select a User to Update", user_options)
         
-        # Extract the selected user's ID
-        selected_user_id = int(selected_user.split(" ")[0])  # Extract ID from the string
+        
+        selected_user_id = int(selected_user.split(" ")[0]) 
 
-        # Display user info fields for update
+        
         with st.form("update_gm_form"):
             st.subheader(f"Update Info for User ID: {selected_user_id}")
 
-            # Get the selected user's data (you can fill in the form with their current info)
+            
             user_data = next(user for user in users if user['id'] == selected_user_id)
             
             first_name = st.text_input("First Name", value=user_data.get('firstName'))
@@ -56,9 +46,9 @@ try:
                         "role": role
                     }
 
-                    # Make the API call to update the user
+                    
                     try:
-                        api_link = f'http://api:4000/u/users/{selected_user_id}'  # API endpoint to update user
+                        api_link = f'http://api:4000/u/users/{selected_user_id}' 
                         response = requests.put(api_link, json=updated_user)
                         response.raise_for_status()
 

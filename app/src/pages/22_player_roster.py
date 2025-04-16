@@ -12,22 +12,23 @@ SideBarLinks()
 
 st.title(f"Rosters:, {st.session_state['first_name']}.")
 
-var_01 = st.text_input('Team: ')
+try:
+    all_teams = requests.get('http://api:4000/t/teams').json()
+    all_teams = [team['name'] for team in all_teams]  
+except:
+    st.write('Could not connect to the database to get teams list')
 
-logger.info(f'var_01 = {var_01}')
+# Create searchbox
+team_options = all_teams
+selected_team = st.selectbox('Team:',
+                              options=team_options,
+                              index=None,
+                              placeholder="Search for a team...",
+)
 
-if var_01:
-    results = requests.get(f'http://api:4000/t/teams/{var_01}').json()
+if selected_team != None:
+    results = requests.get(f'http://api:4000/t/teams/{selected_team}').json()
     st.dataframe(results)
-
-if st.button('List of Teams',
-             type='primary',
-             use_container_width=True):
-    
-    data = {}
-    data = requests.get(f'http://api:4000/t/teams').json()
-    st.dataframe(data)
-
 
 
 

@@ -4,6 +4,7 @@ import pymysql.cursors
 
 reports = Blueprint('reports', __name__)
 
+#------------------------------------------------------------
 @reports.route('/reports', methods=['GET'])
 def get_reports():
     try:
@@ -16,7 +17,7 @@ def get_reports():
     except Exception as e:
         current_app.logger.exception("Error fetching reports")
         return jsonify({"error": str(e)}), 500
-
+#------------------------------------------------------------
 
 @reports.route('/reports', methods=['POST'])
 def create_report():
@@ -41,7 +42,7 @@ def create_report():
     except Exception as e:
         current_app.logger.exception("Error creating report")
         return jsonify({"error": str(e)}), 500
-
+#------------------------------------------------------------
 
 @reports.route('/reports/<int:id>', methods=['PATCH'])
 def patch_report_by_id(id):
@@ -70,7 +71,7 @@ def patch_report_by_id(id):
     except Exception as e:
         current_app.logger.exception("Error updating report")
         return jsonify({"error": str(e)}), 500
-
+#------------------------------------------------------------
 
 @reports.route('/reports/<int:id>', methods=['DELETE'])
 def delete_report_by_id(id):
@@ -83,3 +84,4 @@ def delete_report_by_id(id):
     except Exception as e:
         current_app.logger.exception("Error deleting report")
         return jsonify({"error": str(e)}), 500
+#------------------------------------------------------------

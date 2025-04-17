@@ -69,7 +69,7 @@ def update_gameplan(gameplan_id):
 #------------------------------------------------------------
 
 # Get detail for a single gameplan identified by gameplan_id: 
-# TESTED - PASSING POSTMAN REQUEST 
+
 @gameplans.route('/gameplans/<int:gameplan_id>', methods=['GET']) 
 def get_gameplan(gameplan_id): 
     current_app.logger.info(f'GET /gameplans/{gameplan_id} route') 

@@ -23,7 +23,7 @@ def get_players():
     return the_response
 #------------------------------------------------------------
 # Create a new player:
-# TESTED - FAILING POSTMAN REQUEST 404 RESOURCE NOT FOUND
+# TESTED - PASSING POSTMAN REQUEST
 
 @players.route('/players', methods=['POST'])
 def create_player():
@@ -53,7 +53,7 @@ def create_player():
 #------------------------------------------------------------
 # Update player info for a particular player:
 # The player id should be included in the JSON payload.
-# TESTED - FAILING POSTMAN REQUEST 404 RESOURCE NOT FOUND & 405 METHOD NOT ALLOWED
+# TESTED - PASSING POSTMAN REQUEST
 
 @players.route('/players', methods=['PUT'])
 def update_player():
@@ -192,46 +192,3 @@ def get_playersStats_minutes():
         current_app.logger.exception("Error fetching player stats minutes")
         # Return the error message in the JSON response for debugging purposes
         return jsonify({"error": str(e)}), 500
-
-
-# FORMATS BEING USED FOR REQUESTS:
-'''
-GET ALL PLAYERS: localhost:4000/pl/players
-GET PLAYER BY ID: localhost:4000/pl/players/<player_id>
-DELETE PLAYER: localhost:4000/pl/players/<player_id>
-
-POST NEW PLAYER: localhost:4000/pl/players
-{
-    "firstName": "LeBron",
-    "middleName": "Raymone",
-    "lastName": "James",
-    "agentId": 1,
-    "position": "Small Forward",
-    "teamId": 1,
-    "height": 206,
-    "weight": 113,
-    "dob": "1984-12-30",
-    "injuryId": null
-}
-
-PUT (FULL UPDATE) PLAYER: localhost:4000/pl/players
-{
-    "firstName": "LeBron",
-    "middleName": "Raymone",
-    "lastName": "James",
-    "agentId": 1,
-    "position": "Small Forward",
-    "teamId": 1,
-    "height": 207,
-    "weight": 114,
-    "dob": "1984-12-30",
-    "injuryId": null
-}
-
-PATCH (PARTIAL UPDATE) PLAYER: localhost:4000/pl/players/<player_id>
-{
-    "weight": 115,
-    "height": 208
-}
-(add as many params as required in the player update). 
-'''

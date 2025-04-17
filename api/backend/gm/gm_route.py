@@ -61,7 +61,7 @@ def get_gm_team(name):
 
 
 #------------------------------------------------------------
-# Do dynamic partial update of gm info for a gm given the id:
+# Gets players agents:
 
 @gm.route('/gm/agents/player/<string:name>', methods=['GET'])
 def get_agent_player(name):
@@ -82,7 +82,7 @@ def get_agent_player(name):
     return the_response
 
 #------------------------------------------------------------
-# Do dynamic partial update of gm info for a gm given the id:
+# Gets coaches agents:
 
 @gm.route('/gm/agents/coach/<string:name>', methods=['GET'])
 def get_agent_coach(name):
@@ -103,7 +103,7 @@ def get_agent_coach(name):
     return the_response
 
 #------------------------------------------------------------
-# Get all coaches from the system:
+# Get list of coaches:
 
 @gm.route('/gm/players', methods=['GET'])
 def get_players():

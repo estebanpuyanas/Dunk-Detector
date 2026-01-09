@@ -4,6 +4,8 @@ services:
     container_name: web-app
     hostname: web-app
     volumes: ["./app/src:/appcode"]
+    environment:
+      - WATCHPACK_POLLING=true
     ports:
       - 8501:8501
 
@@ -12,6 +14,8 @@ services:
     container_name: web-api
     hostname: web-api
     volumes: ["./api:/apicode"]
+    environment:
+      - WATCHPACK_POLLING=true
     ports:
       - 4000:4000
 
@@ -22,7 +26,10 @@ services:
     container_name: mysql_db
     hostname: db
     volumes:
-      - ./database-files:/docker-entrypoint-initdb.d/:ro
+      - "./database-files:/docker-entrypoint-initdb.d/:ro"
+      - "mysql_data:/var/lib/mysql"
     ports:
       - 3200:3306
-  
+
+volumes:
+  mysql_data:
